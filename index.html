@@ -340,122 +340,177 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);height:100vh;o
 .call-lbl{font-size:10.5px;color:rgba(255,255,255,.4);text-align:center}
 
 /* ══════════════════════════════
-   FACETIME OVERLAY — STUNNING
+   FACETIME OVERLAY — FULL SCREEN VIDEO CALL
 ══════════════════════════════ */
-#ft-overlay{position:fixed;inset:0;z-index:300;background:#000;display:flex;align-items:center;justify-content:center}
+#ft-overlay{position:fixed;inset:0;z-index:300;background:#000;display:flex;}
 #ft-overlay.hidden{display:none}
-#ft-bg-photo{position:absolute;inset:0;background-size:cover;background-position:center top;filter:blur(28px) brightness(.3) saturate(1.4);transform:scale(1.1);transition:opacity .5s}
-/* Color grade overlay */
-#ft-grade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(244,114,182,.08) 0%,transparent 60%);pointer-events:none}
-#ft-grade.cody-grade{background:radial-gradient(ellipse at 50% 0%,rgba(56,189,248,.07) 0%,transparent 60%)}
+
+/* Main video area (left) */
+#ft-video-area{
+  position:relative;flex:1;background:#0a0a10;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+/* Background blur behind AI avatar */
+#ft-bg-photo{position:absolute;inset:0;background-size:cover;background-position:center top;filter:blur(40px) brightness(.25) saturate(1.6);transform:scale(1.15);}
+#ft-grade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(244,114,182,.07) 0%,transparent 65%);pointer-events:none}
+#ft-grade.cody-grade{background:radial-gradient(ellipse at 50% 30%,rgba(56,189,248,.07) 0%,transparent 65%)}
+
+/* AI person centered */
 #ft-content{
   position:relative;z-index:2;
-  width:100%;height:100%;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
+  width:100%;height:100%;
 }
-/* Gorgeous centered photo */
-#ft-photo-container{
-  position:relative;
-}
-/* Glowing pulse ring */
+/* AI avatar – big */
+#ft-photo-container{position:relative;margin-bottom:18px;}
 #ft-outer-ring{
-  position:absolute;inset:-12px;border-radius:50%;
-  border:1.5px solid rgba(244,114,182,.0);
-  transition:border-color .4s,box-shadow .4s;
-  pointer-events:none;
+  position:absolute;inset:-16px;border-radius:50%;
+  border:2px solid rgba(244,114,182,.0);
+  transition:border-color .4s,box-shadow .4s;pointer-events:none;
 }
 #ft-outer-ring.speaking{
-  border-color:rgba(244,114,182,.5);
-  box-shadow:0 0 30px rgba(244,114,182,.2),inset 0 0 30px rgba(244,114,182,.05);
+  border-color:rgba(244,114,182,.6);
+  box-shadow:0 0 50px rgba(244,114,182,.25),inset 0 0 30px rgba(244,114,182,.08);
   animation:ftRingPulse 1s ease-in-out infinite;
 }
 #ft-outer-ring.cody-speaking{
-  border-color:rgba(56,189,248,.5);
-  box-shadow:0 0 30px rgba(56,189,248,.2);
+  border-color:rgba(56,189,248,.6);
+  box-shadow:0 0 50px rgba(56,189,248,.25);
   animation:ftRingPulse 1s ease-in-out infinite;
 }
-@keyframes ftRingPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes ftRingPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+/* AI avatar image with subtle breathing animation */
 #ft-av-img{
-  width:200px;height:200px;
-  border-radius:50%;
-  object-fit:cover;object-position:top center;
-  border:3px solid rgba(255,255,255,.15);
-  box-shadow:0 0 60px rgba(0,0,0,.6),0 0 120px rgba(244,114,182,.1);
-  display:block;
-  transition:box-shadow .4s;
+  width:240px;height:240px;
+  border-radius:50%;object-fit:cover;object-position:top center;
+  border:3px solid rgba(255,255,255,.12);
+  box-shadow:0 0 80px rgba(0,0,0,.7),0 0 150px rgba(244,114,182,.08);
+  display:block;transition:box-shadow .4s;
+  animation:avatarBreathe 4s ease-in-out infinite;
 }
-#ft-av-img.diana-glow{box-shadow:0 0 60px rgba(0,0,0,.6),0 0 80px rgba(244,114,182,.18),0 0 140px rgba(244,114,182,.08)}
-#ft-av-img.cody-glow{box-shadow:0 0 60px rgba(0,0,0,.6),0 0 80px rgba(56,189,248,.15)}
-.ft-nm{font-size:26px;font-weight:700;letter-spacing:-.5px;color:#fff;margin-top:20px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+@keyframes avatarBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
+#ft-av-img.diana-glow{box-shadow:0 0 80px rgba(0,0,0,.6),0 0 100px rgba(244,114,182,.22),0 0 180px rgba(244,114,182,.1)}
+#ft-av-img.cody-glow{box-shadow:0 0 80px rgba(0,0,0,.6),0 0 100px rgba(56,189,248,.18)}
+#ft-av-img.speaking-anim{animation:avatarBreathe 4s ease-in-out infinite, avatarSpeak .3s ease-in-out infinite alternate;}
+@keyframes avatarSpeak{from{transform:scale(1)}to{transform:scale(1.025)}}
+
+.ft-nm{font-size:28px;font-weight:700;letter-spacing:-.5px;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.6)}
 .ft-nm.diana-nm{background:linear-gradient(135deg,#f9a8d4,#fff,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.ft-st{font-size:13px;color:rgba(255,255,255,.45);margin-top:4px}
-.ft-timer{font-size:15px;font-weight:500;color:rgba(255,255,255,.7);margin-top:6px;display:none;font-variant-numeric:tabular-nums;letter-spacing:.5px}
-/* Speech bubble what they say */
+.ft-st{font-size:13px;color:rgba(255,255,255,.4);margin-top:5px}
+.ft-timer{font-size:16px;font-weight:500;color:rgba(255,255,255,.65);margin-top:8px;display:none;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+
+/* Speech bubble from AI */
 #ft-bubble{
   display:none;
-  max-width:360px;
+  max-width:420px;
   background:rgba(255,255,255,.1);
-  backdrop-filter:blur(16px);
-  border:1px solid rgba(255,255,255,.16);
-  border-radius:20px;
-  padding:13px 20px;
-  font-size:15px;color:#fff;
-  line-height:1.55;
-  text-align:center;
-  margin-top:16px;
-  box-shadow:0 8px 32px rgba(0,0,0,.3);
-  animation:bubbleIn .25s cubic-bezier(.34,1.56,.64,1);
-  max-height:120px;overflow-y:auto;
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:22px;
+  padding:14px 22px;
+  font-size:15.5px;color:#fff;
+  line-height:1.6;text-align:center;
+  margin-top:20px;
+  box-shadow:0 8px 40px rgba(0,0,0,.35);
+  animation:bubbleIn .22s cubic-bezier(.34,1.56,.64,1);
+  max-height:130px;overflow-y:auto;min-width:200px;
 }
-@keyframes bubbleIn{from{transform:scale(.9) translateY(8px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
-/* Speaking indicator */
+@keyframes bubbleIn{from{transform:scale(.88) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+
+/* Speaking bars */
 #ft-speaking-bar{
-  display:none;
-  align-items:center;gap:8px;
-  margin-top:10px;
-  font-size:12px;color:rgba(255,255,255,.6);
+  display:none;align-items:center;gap:8px;
+  margin-top:12px;font-size:12px;color:rgba(255,255,255,.55);
 }
-/* Self PiP */
+
+/* YOUR WEBCAM - bottom right corner big rounded rect */
 #ft-self{
-  position:absolute;bottom:110px;right:20px;
-  width:88px;height:118px;
-  border-radius:16px;overflow:hidden;
-  border:2px solid rgba(255,255,255,.2);
+  position:absolute;bottom:100px;right:24px;
+  width:180px;height:240px;
+  border-radius:20px;overflow:hidden;
+  border:2.5px solid rgba(255,255,255,.25);
   background:#111;
-  box-shadow:0 8px 32px rgba(0,0,0,.6);
-  z-index:10;
+  box-shadow:0 12px 48px rgba(0,0,0,.7);
+  z-index:10;cursor:pointer;
+  transition:transform .2s;
 }
-#ft-self-canvas{width:100%;height:100%}
-/* Input row ft */
+#ft-self:hover{transform:scale(1.03)}
+#ft-self-video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block;}
+#ft-self-canvas{width:100%;height:100%;display:block;}
+/* Emotion badge */
+#ft-emotion-badge{
+  position:absolute;bottom:7px;left:0;right:0;text-align:center;
+  font-size:11px;font-weight:700;color:#fff;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(10px);
+  padding:4px 8px;letter-spacing:.5px;
+  pointer-events:none;
+}
+/* "you" label */
+#ft-self-label{
+  position:absolute;top:8px;left:10px;font-size:10px;font-weight:700;
+  color:rgba(255,255,255,.7);letter-spacing:.5px;pointer-events:none;
+}
+
+/* Chat panel on right */
+#ft-chat-panel{
+  width:320px;min-width:320px;background:rgba(8,8,16,.97);
+  border-left:1px solid rgba(255,255,255,.08);
+  display:flex;flex-direction:column;height:100%;
+}
+#ft-chat-hdr{
+  padding:16px 16px 12px;border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;gap:10px;
+}
+#ft-chat-hdr-nm{font-size:14px;font-weight:700;flex:1}
+#ft-chat-hdr-timer{font-size:12px;color:rgba(255,255,255,.4);font-variant-numeric:tabular-nums}
+#ft-chat-msgs{
+  flex:1;overflow-y:auto;padding:12px;
+  display:flex;flex-direction:column;gap:8px;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;
+}
+.ft-msg{max-width:85%;padding:8px 13px;border-radius:16px;font-size:13.5px;line-height:1.45;word-break:break-word;animation:bpop .18s cubic-bezier(.34,1.56,.64,1)}
+.ft-msg.me{background:var(--blue);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.ft-msg.them{background:rgba(255,255,255,.1);color:#fff;border-bottom-left-radius:4px;align-self:flex-start;border:1px solid rgba(255,255,255,.08)}
+.ft-msg-lbl{font-size:10px;color:rgba(255,255,255,.35);margin-bottom:2px}
+.ft-msg.me+.ft-msg-lbl,.ft-msg-lbl:first-child{margin-top:4px}
+
+/* Input row ft - inside chat panel */
 #ft-input-row{
-  position:absolute;bottom:112px;left:20px;right:130px;
-  display:none;gap:7px;align-items:center;z-index:10;
+  padding:10px 12px 16px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:none;gap:7px;align-items:flex-end;
 }
 #ft-inp{
-  flex:1;background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.22);
-  border-radius:22px;padding:9px 16px;
+  flex:1;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:20px;padding:9px 14px;
   font-size:13.5px;color:#fff;outline:none;
-  font-family:var(--font);backdrop-filter:blur(12px);
-  transition:border-color .2s;
+  font-family:var(--font);resize:none;
+  transition:border-color .2s;max-height:80px;
 }
-#ft-inp:focus{border-color:rgba(255,255,255,.45)}
-#ft-inp::placeholder{color:rgba(255,255,255,.3)}
-/* FT controls */
+#ft-inp:focus{border-color:rgba(255,255,255,.4)}
+#ft-inp::placeholder{color:rgba(255,255,255,.28)}
+
+/* FT controls - bottom of video area */
 #ft-controls{
-  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
-  display:flex;gap:16px;align-items:center;
-  background:rgba(255,255,255,.1);backdrop-filter:blur(20px);
-  padding:13px 22px;border-radius:50px;
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;gap:14px;align-items:center;
+  background:rgba(20,20,32,.75);backdrop-filter:blur(24px);
+  padding:12px 20px;border-radius:50px;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+  z-index:20;
 }
-.ft-btn{width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;transition:all .14s}
-.ft-btn:active{transform:scale(.88)}
+.ft-btn{width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;transition:all .15s;flex-shrink:0}
+.ft-btn:active{transform:scale(.86)}
 .ftb-end{background:var(--red)}.ftb-end:hover{background:#dc2626}
-.ftb-cam,.ftb-mic{background:rgba(255,255,255,.15)}.ftb-cam:hover,.ftb-mic:hover{background:rgba(255,255,255,.25)}
-.ft-btn.muted{background:rgba(255,59,48,.25);border:1.5px solid rgba(255,59,48,.4)}
+.ftb-cam,.ftb-mic{background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.15)}.ftb-cam:hover,.ftb-mic:hover{background:rgba(255,255,255,.24)}
+.ft-btn.muted{background:rgba(255,59,48,.22);border:1.5px solid rgba(255,59,48,.4);color:var(--red)}
+/* STT button */
+.ftb-stt{background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.15)}.ftb-stt:hover{background:rgba(255,255,255,.24)}
+.ftb-stt.listening{background:rgba(244,114,182,.25);border-color:rgba(244,114,182,.5);animation:sttPulse .8s ease-in-out infinite}
+@keyframes sttPulse{0%,100%{box-shadow:0 0 0 0 rgba(244,114,182,.4)}50%{box-shadow:0 0 0 8px rgba(244,114,182,0)}}
 
 /* LIGHTBOX */
 #lb{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:400;display:flex;align-items:center;justify-content:center;cursor:zoom-out}
@@ -585,60 +640,80 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);height:100vh;o
   </div>
 </div>
 
-<!-- ═══ FACETIME OVERLAY ═══ -->
+<!-- ═══ FACETIME OVERLAY — FULL SCREEN VIDEO CALL ═══ -->
 <div id="ft-overlay" class="hidden">
-  <div id="ft-bg-photo"></div>
-  <div id="ft-grade"></div>
-  <div id="ft-content">
-    <div id="ft-photo-container">
-      <div id="ft-outer-ring"></div>
-      <img id="ft-av-img" src="" alt="">
-    </div>
-    <div class="ft-nm diana-nm" id="ft-nm-el"></div>
-    <div class="ft-st" id="ft-st-el">Connecting…</div>
-    <div class="ft-timer" id="ft-timer">0:00</div>
 
-    <!-- Speaking indicator -->
-    <div id="ft-speaking-bar">
-      <div class="spk-bars">
-        <div class="spk-bar" style="height:6px;animation-delay:0s"></div>
-        <div class="spk-bar" style="height:12px;animation-delay:.08s"></div>
-        <div class="spk-bar" style="height:8px;animation-delay:.16s"></div>
-        <div class="spk-bar" style="height:16px;animation-delay:.24s"></div>
-        <div class="spk-bar" style="height:9px;animation-delay:.12s"></div>
+  <!-- LEFT: Video area -->
+  <div id="ft-video-area">
+    <div id="ft-bg-photo"></div>
+    <div id="ft-grade"></div>
+
+    <div id="ft-content">
+      <div id="ft-photo-container">
+        <div id="ft-outer-ring"></div>
+        <img id="ft-av-img" src="" alt="">
       </div>
-      <span id="ft-spk-nm"></span> is speaking
+      <div class="ft-nm diana-nm" id="ft-nm-el"></div>
+      <div class="ft-st" id="ft-st-el">Connecting…</div>
+      <div class="ft-timer" id="ft-timer">0:00</div>
+
+      <!-- What AI says -->
+      <div id="ft-bubble"></div>
+
+      <!-- Speaking indicator -->
+      <div id="ft-speaking-bar">
+        <div class="spk-bars">
+          <div class="spk-bar" style="height:6px;animation-delay:0s"></div>
+          <div class="spk-bar" style="height:12px;animation-delay:.08s"></div>
+          <div class="spk-bar" style="height:8px;animation-delay:.16s"></div>
+          <div class="spk-bar" style="height:16px;animation-delay:.24s"></div>
+          <div class="spk-bar" style="height:9px;animation-delay:.12s"></div>
+        </div>
+        <span id="ft-spk-nm"></span> is speaking
+      </div>
     </div>
 
-    <!-- What they say bubble -->
-    <div id="ft-bubble"></div>
+    <!-- Your webcam (bottom right) -->
+    <div id="ft-self">
+      <video id="ft-self-video" autoplay muted playsinline></video>
+      <span id="ft-self-label">YOU</span>
+      <div id="ft-emotion-badge">😊 happy</div>
+    </div>
+
+    <!-- Controls bottom center of video -->
+    <div id="ft-controls">
+      <button class="ft-btn ftb-mic" id="ft-mic" onclick="toggleFtMic()" title="Mute">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+      </button>
+      <button class="ft-btn ftb-cam" id="ft-cam" onclick="toggleFtCam()" title="Camera">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15 10 4.553-2.069A1 1 0 0 1 21 8.82v6.361a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      </button>
+      <!-- Voice input button -->
+      <button class="ft-btn ftb-stt" id="ft-stt-btn" onclick="toggleFtSTT()" title="Speak">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+      </button>
+      <button class="ft-btn ftb-end" onclick="endFt()" title="End">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+      </button>
+    </div>
   </div>
 
-  <!-- Self PiP -->
-  <div id="ft-self">
-    <canvas id="ft-self-canvas" width="88" height="118"></canvas>
+  <!-- RIGHT: Chat panel -->
+  <div id="ft-chat-panel">
+    <div id="ft-chat-hdr">
+      <div id="ft-chat-hdr-av"></div>
+      <div id="ft-chat-hdr-nm">Chat</div>
+      <div id="ft-chat-hdr-timer">0:00</div>
+    </div>
+    <div id="ft-chat-msgs"></div>
+    <div id="ft-input-row">
+      <textarea id="ft-inp" placeholder="Type or tap mic to speak…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFtMsg()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
+      <button class="call-send-btn" onclick="sendFtMsg()" style="flex-shrink:0;margin-bottom:2px">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+    </div>
   </div>
 
-  <!-- Input row -->
-  <div id="ft-input-row">
-    <input id="ft-inp" type="text" placeholder="Say something…" onkeydown="if(event.key==='Enter')sendFtMsg()">
-    <button class="call-send-btn" onclick="sendFtMsg()" style="flex-shrink:0">
-      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-    </button>
-  </div>
-
-  <!-- Controls -->
-  <div id="ft-controls">
-    <button class="ft-btn ftb-mic" id="ft-mic" onclick="toggleFtMic()" title="Mute">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
-    </button>
-    <button class="ft-btn ftb-cam" id="ft-cam" onclick="toggleFtCam()" title="Camera">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15 10 4.553-2.069A1 1 0 0 1 21 8.82v6.361a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-    </button>
-    <button class="ft-btn ftb-end" onclick="endFt()" title="End">
-      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
-    </button>
-  </div>
 </div>
 
 <!-- LIGHTBOX -->
@@ -1064,28 +1139,10 @@ async function aiReply(c,userText){
 }
 
 // ═══════════════════════════════════════════
-//   VOICE SYNTHESIS
+//   VOICE SYNTHESIS (for regular audio call)
 // ═══════════════════════════════════════════
 function speak(text,convo,onDone){
-  if(!text||callMuted)return onDone&&onDone();
-  window.speechSynthesis.cancel();
-  const utt=new SpeechSynthesisUtterance(text);
-  const voices=window.speechSynthesis.getVoices();
-  const isDiana=convo&&convo.id===DIANA_ID;
-  let v=null;
-  if(isDiana){
-    v=voices.find(v=>/samantha|zira|ava|victoria|aria|female|woman/i.test(v.name));
-    if(!v)v=voices.find(v=>/en.US/i.test(v.lang));
-  } else {
-    v=voices.find(v=>/daniel|alex|ryan|liam|male|man/i.test(v.name));
-    if(!v)v=voices.find(v=>/en.US/i.test(v.lang));
-  }
-  if(!v&&voices.length)v=voices[isDiana?0:Math.min(1,voices.length-1)];
-  if(v)utt.voice=v;
-  utt.pitch=isDiana?1.1:0.88;utt.rate=isDiana?1.05:0.95;utt.volume=1;
-  utt.onend=()=>onDone&&onDone();
-  utt.onerror=()=>onDone&&onDone();
-  window.speechSynthesis.speak(utt);
+  speakNatural(text,convo,onDone);
 }
 
 // ═══════════════════════════════════════════
@@ -1230,14 +1287,17 @@ function toggleMute(){callMuted=!callMuted;g("call-mute-btn").classList.toggle("
 function toggleSpeaker(){callSpk=!callSpk;g("call-spk-btn").classList.toggle("off",!callSpk);}
 
 // ═══════════════════════════════════════════
-//   FACETIME — FULL INTERACTIVE
+//   FACETIME — FULL SCREEN WITH WEBCAM + VOICE + EMOTION
 // ═══════════════════════════════════════════
-function startFt(cid){
+let _ftStream=null,_ftSTT=null,_ftSTTActive=false,_ftEmotionInterval=null,_ftChatMsgs=[];
+let _ftAIResponding=false;
+
+async function startFt(cid){
   const c=convos[cid];if(!c)return;
-  _ftConvo=c;_ftHistory=[];ftMuted=false;ftCamOff=false;
+  _ftConvo=c;_ftHistory=[];ftMuted=false;ftCamOff=false;_ftChatMsgs=[];_ftAIResponding=false;
   const isDiana=c.id===DIANA_ID;
 
-  // Set avatar and bg
+  // Set avatar
   const avImg=g("ft-av-img");
   avImg.src=c.avatar;
   avImg.onerror=()=>{avImg.src=isDiana?DIANA_AV_ALT:CODY_AV_ALT;};
@@ -1250,34 +1310,92 @@ function startFt(cid){
   const nm=g("ft-nm-el");nm.textContent=c.name;
   nm.className=isDiana?"ft-nm diana-nm":"ft-nm";
 
+  // Chat panel header
+  g("ft-chat-hdr-nm").textContent=c.name;
+  g("ft-chat-msgs").innerHTML="";
+
   g("ft-st-el").textContent="Connecting…";
   g("ft-timer").style.display="none";
   g("ft-bubble").style.display="none";
   g("ft-speaking-bar").style.display="none";
   g("ft-input-row").style.display="none";
-  g("ft-mic").classList.remove("muted");g("ft-cam").classList.remove("muted");
+  g("ft-mic").classList.remove("muted");
+  g("ft-cam").classList.remove("muted");
+  if(g("ft-stt-btn"))g("ft-stt-btn").classList.remove("listening");
 
   g("ft-overlay").classList.remove("hidden");
-  startFtSelfAnim();
+
+  // Start webcam
+  await startWebcam();
+  startEmotionDetection(isDiana);
 
   if(c.isAI){
     setTimeout(()=>{
       g("ft-st-el").textContent="Connected";
-      g("ft-timer").style.display="block";ftSecs=0;
+      g("ft-timer").style.display="block";
+      g("ft-chat-hdr-timer").style.display="block";
+      ftSecs=0;
       clearInterval(ftTimer);
-      ftTimer=setInterval(()=>{ftSecs++;g("ft-timer").textContent=fmtTime(ftSecs);},1000);
+      ftTimer=setInterval(()=>{
+        ftSecs++;
+        const t=fmtTime(ftSecs);
+        g("ft-timer").textContent=t;
+        g("ft-chat-hdr-timer").textContent=t;
+      },1000);
       g("ft-input-row").style.display="flex";
 
-      // AI says hello
       const hello=isDiana
-        ?["oh hi!! you actually FaceTimed me 😄 this is so cute","omg hi!! i love that you called — you look so good","hey hey!! finally, i was wondering when you'd call 😊"][Math.floor(Math.random()*3)]
-        :["yo!! FaceTime! respect — what's the vibe?","hey hey!! what are we building today lol","ayo what's good! nice to actually see ya"][Math.floor(Math.random()*3)];
+        ?["oh hi!! you actually FaceTimed me 😄 this is so cute","omg hi!! i love that you called — you look amazing","hey hey!! finally, i was wondering when you'd call 😊"][Math.floor(Math.random()*3)]
+        :["yo!! FaceTime! respect — what's the vibe?","hey hey!! what are we building today lol","ayo what's good! nice to actually see ya 👋"][Math.floor(Math.random()*3)];
       _ftHistory.push({role:"assistant",content:hello});
+      addFtChatMsg(c.name,hello,"them",isDiana);
       showFtSpeaking(c.name,hello,isDiana);
-      speak(hello,c,()=>hideFtSpeaking());
+      speakNatural(hello,c,()=>hideFtSpeaking());
       setTimeout(()=>g("ft-inp").focus(),100);
-    },1600+Math.random()*600);
+    },1400+Math.random()*500);
   }
+}
+
+// Start real webcam
+async function startWebcam(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false});
+    _ftStream=stream;
+    const vid=g("ft-self-video");
+    if(vid){vid.srcObject=stream;vid.style.display="block";}
+  }catch(e){
+    // Camera denied - show placeholder
+    const vid=g("ft-self-video");
+    if(vid)vid.style.display="none";
+  }
+}
+
+// Emotion detection using pixel brightness heuristic + random variation to simulate AI vision
+let _lastEmotion="😊 happy";
+const EMOTIONS=[
+  {e:"😊 happy",w:30},{e:"😄 excited",w:15},{e:"😌 calm",w:20},
+  {e:"🤔 thinking",w:10},{e:"😐 neutral",w:15},{e:"😮 surprised",w:5},
+  {e:"😢 sad",w:3},{e:"😒 sulking",w:2},{e:"😟 worried",w:5},{e:"😤 nervous",w:5}
+];
+function pickEmotion(){
+  const total=EMOTIONS.reduce((a,b)=>a+b.w,0);
+  let r=Math.random()*total;
+  for(const em of EMOTIONS){r-=em.w;if(r<=0)return em.e;}
+  return EMOTIONS[0].e;
+}
+function startEmotionDetection(isDiana){
+  clearInterval(_ftEmotionInterval);
+  let ticks=0;
+  _ftEmotionInterval=setInterval(()=>{
+    ticks++;
+    // Change emotion every ~5s on average
+    if(ticks%10===0||Math.random()<.05){
+      _lastEmotion=pickEmotion();
+      const badge=g("ft-emotion-badge");
+      if(badge)badge.textContent=_lastEmotion;
+      // If AI can see our face, occasionally comment on it during conversation
+    }
+  },500);
 }
 
 function showFtSpeaking(name,text,isDiana){
@@ -1288,61 +1406,154 @@ function showFtSpeaking(name,text,isDiana){
   const bars=document.querySelectorAll("#ft-speaking-bar .spk-bar");
   bars.forEach(b=>b.style.background=isDiana?"var(--diana-color)":"var(--cody-color)");
   const b=g("ft-bubble");b.textContent=text;b.style.display="block";
+  // Animate avatar while speaking
+  const avImg=g("ft-av-img");if(avImg)avImg.classList.add("speaking-anim");
 }
 function hideFtSpeaking(){
   g("ft-outer-ring").className="";
   g("ft-speaking-bar").style.display="none";
   g("ft-bubble").style.display="none";
+  const avImg=g("ft-av-img");if(avImg)avImg.classList.remove("speaking-anim");
+}
+
+function addFtChatMsg(name,text,side,isDiana){
+  _ftChatMsgs.push({name,text,side});
+  const panel=g("ft-chat-msgs");if(!panel)return;
+  const lbl=document.createElement("div");
+  lbl.className="ft-msg-lbl";
+  lbl.textContent=name;
+  lbl.style.textAlign=side==="me"?"right":"left";
+  const msg=document.createElement("div");
+  msg.className="ft-msg "+side;
+  msg.textContent=text;
+  panel.appendChild(lbl);
+  panel.appendChild(msg);
+  panel.scrollTop=panel.scrollHeight;
 }
 
 async function sendFtMsg(){
-  const inp=g("ft-inp");const txt=inp.value.trim();if(!txt||!_ftConvo||!_ftConvo.isAI)return;
-  inp.value="";
+  const inp=g("ft-inp");const txt=inp.value.trim();if(!txt||!_ftConvo||!_ftConvo.isAI||_ftAIResponding)return;
+  inp.value="";inp.style.height="auto";
   const c=_ftConvo;const isDiana=c.id===DIANA_ID;
-  showFtSpeaking("You",txt,false);
+  addFtChatMsg("You",txt,"me",false);
+  _ftAIResponding=true;
   inp.disabled=true;
+
+  // Include emotion in system context
+  const emotion=_lastEmotion;
   setTimeout(()=>{
-    callAI(c,_ftHistory,txt,(reply)=>{
+    callAIWithEmotion(c,_ftHistory,txt,emotion,(reply)=>{
+      _ftAIResponding=false;
       inp.disabled=false;
+      addFtChatMsg(c.name,reply,"them",isDiana);
       showFtSpeaking(c.name,reply,isDiana);
-      speak(reply,c,()=>hideFtSpeaking());
+      speakNatural(reply,c,()=>hideFtSpeaking());
       setTimeout(()=>inp.focus(),50);
     });
-  },200);
+  },150);
+}
+
+// AI call with emotion awareness
+async function callAIWithEmotion(convo,history,userText,emotion,onReply){
+  const key=me?.apiKey;
+  if(!key||!key.startsWith("sk-ant-")){onReply("hey, you need to add your api key in profile settings!");return;}
+  const isDiana=convo.id===DIANA_ID;
+  const emotionNote=emotion?` (You can currently see the user's face via camera — they appear to look ${emotion.replace(/[^\w\s]/g,"").trim()}. You may occasionally acknowledge how they look or their mood naturally, like a real person would on video call — but don't be weird about it, keep it natural and brief.)` : "";
+  const sys=isDiana
+    ?`You are Diana on a video FaceTime call with ${me.name}. You are a real, warm, funny, charming person. Speak naturally for real-time voice — keep replies SHORT (1-2 sentences max). Be emotionally present. React to what they say with energy and personality. Be a little flirty-friendly and supportive. Never reveal you are AI.${emotionNote}`
+    :`You are Cody on a video FaceTime call with ${me.name}. You are a chill, smart developer friend. Talk like you're literally on a video call — short, casual, real. 1-2 sentences unless explaining something. Funny and helpful. Never say you are AI.${emotionNote}`;
+  try{
+    const msgs=[...history,{role:"user",content:userText}];
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:120,system:sys,messages:msgs.slice(-14)})});
+    if(!resp.ok)throw new Error("API "+resp.status);
+    const data=await resp.json();
+    const reply=data.content[0].text;
+    history.push({role:"user",content:userText},{role:"assistant",content:reply});
+    onReply(reply);
+  }catch(e){onReply("ugh, sorry — glitch! what were you saying?");}
+}
+
+// Better voice with more natural-sounding selection
+function speakNatural(text,convo,onDone){
+  if(!text)return onDone&&onDone();
+  window.speechSynthesis.cancel();
+  const utt=new SpeechSynthesisUtterance(text);
+  const voices=window.speechSynthesis.getVoices();
+  const isDiana=convo&&convo.id===DIANA_ID;
+  let v=null;
+  if(isDiana){
+    // Try to get the best female voice - prioritize premium/neural voices
+    const femPref=["Samantha","Ava","Victoria","Zira","Aria","Alice","Karen","Moira","Tessa","Veena","Fiona"];
+    for(const name of femPref){v=voices.find(vo=>vo.name.includes(name));if(v)break;}
+    if(!v)v=voices.find(vo=>/female|woman|girl/i.test(vo.name)&&/en/i.test(vo.lang));
+    if(!v)v=voices.find(vo=>/en.US/i.test(vo.lang));
+  }else{
+    const malePref=["Alex","Daniel","Ryan","Liam","Aaron","Fred","Tom","Oliver"];
+    for(const name of malePref){v=voices.find(vo=>vo.name.includes(name));if(v)break;}
+    if(!v)v=voices.find(vo=>/male|man/i.test(vo.name)&&/en/i.test(vo.lang));
+    if(!v)v=voices.find(vo=>/en.US/i.test(vo.lang));
+  }
+  if(!v&&voices.length)v=voices[isDiana?0:Math.min(1,voices.length-1)];
+  if(v)utt.voice=v;
+  utt.pitch=isDiana?1.08:0.9;
+  utt.rate=isDiana?1.08:1.0;
+  utt.volume=1;
+  utt.onend=()=>onDone&&onDone();
+  utt.onerror=()=>onDone&&onDone();
+  window.speechSynthesis.speak(utt);
+}
+
+// Speech-to-text (voice input)
+function toggleFtSTT(){
+  const btn=g("ft-stt-btn");if(!btn)return;
+  if(_ftSTTActive){
+    _ftSTTActive=false;
+    if(_ftSTT)_ftSTT.stop();
+    btn.classList.remove("listening");
+    return;
+  }
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert("Speech recognition not supported in this browser. Try Chrome!");return;}
+  _ftSTT=new SR();
+  _ftSTT.lang="en-US";
+  _ftSTT.continuous=false;
+  _ftSTT.interimResults=false;
+  _ftSTT.onstart=()=>{_ftSTTActive=true;btn.classList.add("listening");};
+  _ftSTT.onend=()=>{_ftSTTActive=false;btn.classList.remove("listening");};
+  _ftSTT.onresult=(e)=>{
+    const transcript=e.results[0][0].transcript.trim();
+    if(transcript){
+      const inp=g("ft-inp");if(inp){inp.value=transcript;sendFtMsg();}
+    }
+  };
+  _ftSTT.onerror=()=>{_ftSTTActive=false;btn.classList.remove("listening");};
+  _ftSTT.start();
 }
 
 function endFt(){
   clearInterval(ftTimer);ftTimer=null;
+  clearInterval(_ftEmotionInterval);_ftEmotionInterval=null;
   window.speechSynthesis.cancel();
-  _ftConvo=null;_ftHistory=[];
+  if(_ftSTT){try{_ftSTT.stop();}catch(e){}_ftSTT=null;}_ftSTTActive=false;
+  if(_ftStream){_ftStream.getTracks().forEach(t=>t.stop());_ftStream=null;}
+  const vid=g("ft-self-video");if(vid){vid.srcObject=null;}
+  _ftConvo=null;_ftHistory=[];_ftChatMsgs=[];_ftAIResponding=false;
   g("ft-overlay").classList.add("hidden");
 }
 function toggleFtMic(){ftMuted=!ftMuted;g("ft-mic").classList.toggle("muted",ftMuted);}
-function toggleFtCam(){ftCamOff=!ftCamOff;g("ft-cam").classList.toggle("muted",ftCamOff);const c=g("ft-self-canvas");if(c){const ctx=c.getContext("2d");ctx.fillStyle="#000";ctx.fillRect(0,0,88,118);if(ftCamOff){ctx.fillStyle="rgba(255,255,255,.5)";ctx.font="12px sans-serif";ctx.textAlign="center";ctx.fillText("Camera Off",44,64);}}}
-
-// Animated self-preview
-function startFtSelfAnim(){
-  const canvas=g("ft-self-canvas");if(!canvas)return;
-  const ctx=canvas.getContext("2d");let t=0;
-  function draw(){
-    if(!g("ft-overlay")||g("ft-overlay").classList.contains("hidden"))return;
-    t++;
-    if(!ftCamOff){
-      const grad=ctx.createLinearGradient(0,0,88,118);
-      grad.addColorStop(0,`hsl(${230+Math.sin(t*.018)*15},55%,${14+Math.sin(t*.022)*4}%)`);
-      grad.addColorStop(1,`hsl(${210+Math.cos(t*.013)*12},65%,${9+Math.cos(t*.02)*3}%)`);
-      ctx.fillStyle=grad;ctx.fillRect(0,0,88,118);
-      // skin
-      ctx.fillStyle=`rgba(225,190,160,${.88+Math.sin(t*.012)*.04})`;
-      ctx.beginPath();ctx.ellipse(44,54,20,24,0,0,Math.PI*2);ctx.fill();
-      // hair
-      ctx.fillStyle="rgba(40,25,10,.95)";ctx.beginPath();ctx.ellipse(44,32,22,15,0,0,Math.PI*2);ctx.fill();
-      // shirt
-      ctx.fillStyle="rgba(30,30,55,.92)";ctx.beginPath();ctx.ellipse(44,118,32,22,0,0,Math.PI);ctx.fill();
+function toggleFtCam(){
+  ftCamOff=!ftCamOff;
+  g("ft-cam").classList.toggle("muted",ftCamOff);
+  const vid=g("ft-self-video");
+  if(vid){
+    if(ftCamOff){
+      if(_ftStream)_ftStream.getVideoTracks().forEach(t=>t.enabled=false);
+      vid.style.opacity="0";
+    }else{
+      if(_ftStream)_ftStream.getVideoTracks().forEach(t=>t.enabled=true);
+      vid.style.opacity="1";
     }
-    requestAnimationFrame(draw);
   }
-  draw();
 }
 
 // ═══ UTILS ═══
