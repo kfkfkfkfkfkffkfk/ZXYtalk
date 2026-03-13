@@ -355,73 +355,45 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);height:100vh;o
 #ft-grade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(244,114,182,.07) 0%,transparent 65%);pointer-events:none}
 #ft-grade.cody-grade{background:radial-gradient(ellipse at 50% 30%,rgba(56,189,248,.07) 0%,transparent 65%)}
 
-/* AI person centered */
-#ft-content{
-  position:relative;z-index:2;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  width:100%;height:100%;
+/* AI character canvas fills the entire left video area */
+#ft-ai-canvas{
+  position:absolute;inset:0;width:100%;height:100%;display:block;z-index:2;
 }
-/* AI avatar – big */
-#ft-photo-container{position:relative;margin-bottom:18px;}
-#ft-outer-ring{
-  position:absolute;inset:-16px;border-radius:50%;
-  border:2px solid rgba(244,114,182,.0);
-  transition:border-color .4s,box-shadow .4s;pointer-events:none;
+/* Action caption — what they're doing physically */
+#ft-action-caption{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:4;pointer-events:none;
+  font-size:13px;color:rgba(255,255,255,.55);font-style:italic;
+  text-align:center;letter-spacing:.3px;
+  transition:opacity .4s;opacity:0;
 }
-#ft-outer-ring.speaking{
-  border-color:rgba(244,114,182,.6);
-  box-shadow:0 0 50px rgba(244,114,182,.25),inset 0 0 30px rgba(244,114,182,.08);
-  animation:ftRingPulse 1s ease-in-out infinite;
+#ft-action-caption.show{opacity:1}
+/* Name/status top left overlay */
+#ft-top-info{
+  position:absolute;top:20px;left:24px;z-index:5;pointer-events:none;
 }
-#ft-outer-ring.cody-speaking{
-  border-color:rgba(56,189,248,.6);
-  box-shadow:0 0 50px rgba(56,189,248,.25);
-  animation:ftRingPulse 1s ease-in-out infinite;
-}
-@keyframes ftRingPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-/* AI avatar image with subtle breathing animation */
-#ft-av-img{
-  width:240px;height:240px;
-  border-radius:50%;object-fit:cover;object-position:top center;
-  border:3px solid rgba(255,255,255,.12);
-  box-shadow:0 0 80px rgba(0,0,0,.7),0 0 150px rgba(244,114,182,.08);
-  display:block;transition:box-shadow .4s;
-  animation:avatarBreathe 4s ease-in-out infinite;
-}
-@keyframes avatarBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
-#ft-av-img.diana-glow{box-shadow:0 0 80px rgba(0,0,0,.6),0 0 100px rgba(244,114,182,.22),0 0 180px rgba(244,114,182,.1)}
-#ft-av-img.cody-glow{box-shadow:0 0 80px rgba(0,0,0,.6),0 0 100px rgba(56,189,248,.18)}
-#ft-av-img.speaking-anim{animation:avatarBreathe 4s ease-in-out infinite, avatarSpeak .3s ease-in-out infinite alternate;}
-@keyframes avatarSpeak{from{transform:scale(1)}to{transform:scale(1.025)}}
-
-.ft-nm{font-size:28px;font-weight:700;letter-spacing:-.5px;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.6)}
-.ft-nm.diana-nm{background:linear-gradient(135deg,#f9a8d4,#fff,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.ft-st{font-size:13px;color:rgba(255,255,255,.4);margin-top:5px}
-.ft-timer{font-size:16px;font-weight:500;color:rgba(255,255,255,.65);margin-top:8px;display:none;font-variant-numeric:tabular-nums;letter-spacing:.5px}
-
-/* Speech bubble from AI */
+/* Speech bubble at bottom center of video */
 #ft-bubble{
+  position:absolute;bottom:110px;left:50%;transform:translateX(-50%);
+  z-index:5;
   display:none;
-  max-width:420px;
-  background:rgba(255,255,255,.1);
+  max-width:460px;width:max-content;
+  background:rgba(10,10,20,.75);
   backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.15);
   border-radius:22px;
   padding:14px 22px;
   font-size:15.5px;color:#fff;
   line-height:1.6;text-align:center;
-  margin-top:20px;
-  box-shadow:0 8px 40px rgba(0,0,0,.35);
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
   animation:bubbleIn .22s cubic-bezier(.34,1.56,.64,1);
-  max-height:130px;overflow-y:auto;min-width:200px;
+  max-height:130px;overflow-y:auto;min-width:180px;
 }
-@keyframes bubbleIn{from{transform:scale(.88) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
-
-/* Speaking bars */
+/* Speaking bar above bubble */
 #ft-speaking-bar{
-  display:none;align-items:center;gap:8px;
-  margin-top:12px;font-size:12px;color:rgba(255,255,255,.55);
+  position:absolute;bottom:88px;left:50%;transform:translateX(-50%);
+  z-index:5;display:none;align-items:center;gap:8px;
+  font-size:12px;color:rgba(255,255,255,.55);white-space:nowrap;
 }
 
 /* YOUR WEBCAM - bottom right corner big rounded rect */
@@ -525,6 +497,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);height:100vh;o
 /* SPEAKING bars */
 @keyframes spkPulse{0%,100%{transform:scaleY(0.4);opacity:.6}50%{transform:scaleY(1);opacity:1}}
 @media(max-width:640px){#sidebar{display:none}}
+@keyframes incPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.3)}70%{box-shadow:0 0 0 20px rgba(255,255,255,0)}}
 </style>
 </head>
 <body>
@@ -541,6 +514,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);height:100vh;o
     </div>
     <label>Name</label><input type="text" id="su-nm" placeholder="Your name" maxlength="30">
     <label>Email</label><input type="email" id="su-em" placeholder="you@example.com">
+    <label>Age <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--tx3)">— no restrictions, just changes how the AIs vibe with you (14yr old baddie vs 30yr old CEO etc.)</span></label><input type="number" id="su-age" placeholder="Your age" min="1" max="120">
     <label>Anthropic API Key <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--tx3)">(so Diana & Cody can actually talk to you)</span></label>
     <input type="password" id="su-key" placeholder="sk-ant-api03-…" autocomplete="off">
     <div class="tog-row"><div class="tr-text"><div class="tr-title">Stay logged in</div><div class="tr-sub">Skip sign-in on future visits</div></div><div class="toggle on" id="su-tog" onclick="togR('su')"></div></div>
@@ -577,6 +551,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);height:100vh;o
       <button class="btn btn-p" style="flex:2" onclick="saveProf()">Save</button>
     </div>
     <button class="btn btn-g" style="width:100%;margin-top:8px;color:var(--red)" onclick="doLogout()">Sign Out</button>
+    <button class="btn btn-g" style="width:100%;margin-top:6px;color:var(--red);opacity:.7" onclick="deleteAccount()">Delete Account</button>
   </div>
 </div>
 
@@ -648,66 +623,82 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);height:100vh;o
     <div id="ft-bg-photo"></div>
     <div id="ft-grade"></div>
 
-    <div id="ft-content">
-      <div id="ft-photo-container">
-        <div id="ft-outer-ring"></div>
-        <img id="ft-av-img" src="" alt="">
-      </div>
+    <!-- Animated AI character canvas fills left side -->
+    <canvas id="ft-ai-canvas"></canvas>
+
+    <!-- Action caption overlay -->
+    <div id="ft-action-caption"></div>
+
+    <!-- Name + status top left -->
+    <div id="ft-top-info">
       <div class="ft-nm diana-nm" id="ft-nm-el"></div>
       <div class="ft-st" id="ft-st-el">Connecting…</div>
-      <div class="ft-timer" id="ft-timer">0:00</div>
-
-      <!-- What AI says -->
-      <div id="ft-bubble"></div>
-
-      <!-- Speaking indicator -->
-      <div id="ft-speaking-bar">
-        <div class="spk-bars">
-          <div class="spk-bar" style="height:6px;animation-delay:0s"></div>
-          <div class="spk-bar" style="height:12px;animation-delay:.08s"></div>
-          <div class="spk-bar" style="height:8px;animation-delay:.16s"></div>
-          <div class="spk-bar" style="height:16px;animation-delay:.24s"></div>
-          <div class="spk-bar" style="height:9px;animation-delay:.12s"></div>
-        </div>
-        <span id="ft-spk-nm"></span> is speaking
-      </div>
+      <div class="ft-timer" id="ft-timer" style="display:none">0:00</div>
     </div>
 
-    <!-- Your webcam (bottom right) -->
+    <!-- What AI says bubble -->
+    <div id="ft-bubble"></div>
+
+    <!-- Speaking bar -->
+    <div id="ft-speaking-bar">
+      <div class="spk-bars">
+        <div class="spk-bar" style="height:6px;animation-delay:0s"></div>
+        <div class="spk-bar" style="height:12px;animation-delay:.08s"></div>
+        <div class="spk-bar" style="height:8px;animation-delay:.16s"></div>
+        <div class="spk-bar" style="height:16px;animation-delay:.24s"></div>
+        <div class="spk-bar" style="height:9px;animation-delay:.12s"></div>
+      </div>
+      <span id="ft-spk-nm"></span> is speaking
+    </div>
+
+    <!-- Your webcam (bottom right of video area) -->
     <div id="ft-self">
       <video id="ft-self-video" autoplay muted playsinline></video>
+      <canvas id="ft-self-canvas" style="display:none"></canvas>
       <span id="ft-self-label">YOU</span>
-      <div id="ft-emotion-badge">😊 happy</div>
+      <div id="ft-emotion-badge">📷 camera off</div>
     </div>
 
-    <!-- Controls bottom center of video -->
+    <!-- Controls bottom center -->
     <div id="ft-controls">
-      <button class="ft-btn ftb-mic" id="ft-mic" onclick="toggleFtMic()" title="Mute">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
-      </button>
-      <button class="ft-btn ftb-cam" id="ft-cam" onclick="toggleFtCam()" title="Camera">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15 10 4.553-2.069A1 1 0 0 1 21 8.82v6.361a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-      </button>
-      <!-- Voice input button -->
-      <button class="ft-btn ftb-stt" id="ft-stt-btn" onclick="toggleFtSTT()" title="Speak">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
-      </button>
-      <button class="ft-btn ftb-end" onclick="endFt()" title="End">
-        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
-      </button>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <button class="ft-btn ftb-mic" id="ft-mic" onclick="toggleFtMic()" title="Mute">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+        </button>
+        <span style="font-size:9px;color:rgba(255,255,255,.4)">Mute</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <button class="ft-btn ftb-cam" id="ft-cam" onclick="toggleFtCam()" title="Camera">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15 10 4.553-2.069A1 1 0 0 1 21 8.82v6.361a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </button>
+        <span style="font-size:9px;color:rgba(255,255,255,.4)">Camera</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <button class="ft-btn ftb-stt" id="ft-stt-btn" onclick="toggleFtSTT()" title="Voice input">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+        </button>
+        <span style="font-size:9px;color:rgba(255,255,255,.4)">Speak</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <button class="ft-btn ftb-end" id="ft-end-btn" onclick="endFt()" title="End call">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+        </button>
+        <span style="font-size:9px;color:rgba(255,255,255,.4)">End</span>
+      </div>
     </div>
   </div>
 
   <!-- RIGHT: Chat panel -->
   <div id="ft-chat-panel">
     <div id="ft-chat-hdr">
-      <div id="ft-chat-hdr-av"></div>
       <div id="ft-chat-hdr-nm">Chat</div>
       <div id="ft-chat-hdr-timer">0:00</div>
     </div>
     <div id="ft-chat-msgs"></div>
     <div id="ft-input-row">
-      <textarea id="ft-inp" placeholder="Type or tap mic to speak…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFtMsg()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
+      <textarea id="ft-inp" placeholder="Type or use mic…" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFtMsg()}"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
       <button class="call-send-btn" onclick="sendFtMsg()" style="flex-shrink:0;margin-bottom:2px">
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
       </button>
@@ -715,6 +706,78 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);height:100vh;o
   </div>
 
 </div>
+
+<!-- ═══ AI SETTINGS MODAL ═══ -->
+<div class="overlay hidden" id="ai-settings-ol">
+  <div class="modal" style="width:460px;max-height:90vh;overflow-y:auto;scrollbar-width:thin">
+    <h1 id="ai-set-title">Customize AI</h1>
+    <p class="sub">Change name, photo, personality, location & voice. Photo affects how they look on FaceTime.</p>
+    <div class="av-upload">
+      <div class="av-pre" id="ai-set-av" onclick="document.getElementById('ai-set-av-f').click()" style="width:90px;height:90px;font-size:32px"></div>
+      <input type="file" id="ai-set-av-f" accept="image/*" style="display:none" onchange="rdAIAv(this)">
+      <span style="font-size:11.5px;color:var(--tx2);text-align:center">Tap to change photo<br><span style="color:var(--tx3);font-size:10.5px">Affects FaceTime appearance & sent selfies</span></span>
+    </div>
+    <label>Display Name</label>
+    <input type="text" id="ai-set-nm" maxlength="30" placeholder="e.g. Diana, Alex, Jordan…">
+    <label>Personality / Vibe</label>
+    <textarea id="ai-set-persona" rows="3" placeholder="e.g. bubbly college girl who loves fashion & music, very flirty, sarcastic humor…" style="width:100%;background:var(--bg4);border:1.5px solid var(--bdr2);border-radius:11px;padding:10px 13px;font-size:13.5px;color:var(--tx);font-family:var(--font);outline:none;resize:vertical;margin-bottom:13px;transition:border-color .2s"></textarea>
+    <label>Current Location <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--tx3)">(where they are right now)</span></label>
+    <input type="text" id="ai-set-loc" placeholder="e.g. Home in Los Angeles, Coffee shop in NYC…">
+    <label>Voice Style</label>
+    <select id="ai-set-voice" style="width:100%;background:var(--bg4);border:1.5px solid var(--bdr2);border-radius:11px;padding:11px 13px;font-size:14px;color:var(--tx);font-family:var(--font);outline:none;margin-bottom:13px;cursor:pointer;-webkit-appearance:none">
+      <option value="female_bright">Female — Bright & Bubbly (Diana default)</option>
+      <option value="female_warm">Female — Warm & Chill</option>
+      <option value="female_deep">Female — Deep & Confident</option>
+      <option value="male_chill">Male — Chill & Casual (Cody default)</option>
+      <option value="male_deep">Male — Deep & Serious</option>
+      <option value="male_bright">Male — Bright & Energetic</option>
+    </select>
+    <div class="err" id="ai-set-err"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-g" style="flex:1" onclick="closeAISettings()">Cancel</button>
+      <button class="btn btn-p" style="flex:2" onclick="saveAISettings()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WALKING OVERLAY ═══ -->
+<div id="walk-overlay" style="display:none;position:fixed;inset:0;z-index:350;background:#000;flex-direction:column">
+  <canvas id="walk-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.7) 100%);pointer-events:none"></div>
+  <div id="walk-ui" style="position:absolute;bottom:0;left:0;right:0;padding:28px 24px 36px;text-align:center">
+    <div id="walk-from" style="font-size:12px;color:rgba(255,255,255,.4);letter-spacing:.5px;margin-bottom:4px"></div>
+    <div id="walk-nm" style="font-size:20px;font-weight:700;color:#fff;margin-bottom:2px"></div>
+    <div id="walk-dest-lbl" style="font-size:14px;color:rgba(255,255,255,.65);margin-bottom:6px"></div>
+    <div id="walk-eta-lbl" style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:16px"></div>
+    <div style="width:260px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 20px;overflow:hidden">
+      <div id="walk-bar" style="height:100%;width:0%;background:var(--green);border-radius:2px;transition:width .8s linear"></div>
+    </div>
+    <div id="walk-msg-bubble" style="display:none;background:rgba(255,255,255,.12);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:10px 18px;font-size:14px;color:#fff;max-width:320px;margin:0 auto 16px;animation:bubbleIn .22s ease"></div>
+    <button onclick="endWalk(true)" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.2);color:#fff;border-radius:24px;padding:10px 28px;font-size:14px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px)">Stop Walking</button>
+  </div>
+</div>
+
+<!-- ═══ INCOMING CALL OVERLAY ═══ -->
+<div id="incoming-ol" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(30px);align-items:center;justify-content:center;flex-direction:column;gap:20px">
+  <div id="inc-av" style="width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,.2);animation:incPulse 1.5s ease-in-out infinite"></div>
+  <div id="inc-nm" style="font-size:28px;font-weight:700;color:#fff"></div>
+  <div id="inc-type-lbl" style="font-size:15px;color:rgba(255,255,255,.55)">Incoming Call</div>
+  <div style="display:flex;gap:32px;margin-top:8px">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+      <button onclick="declineIncoming()" style="width:64px;height:64px;border-radius:50%;background:#ef4444;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+      </button>
+      <span style="font-size:12px;color:rgba(255,255,255,.5)">Decline</span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+      <button onclick="acceptIncoming()" style="width:64px;height:64px;border-radius:50%;background:#22c55e;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </button>
+      <span style="font-size:12px;color:rgba(255,255,255,.5)">Accept</span>
+    </div>
+  </div>
+</div>
+
 
 <!-- LIGHTBOX -->
 <div id="lb" class="hidden" onclick="closeLb()"><img id="lb-img" src=""></div>
@@ -921,6 +984,7 @@ function renderChat(){
         <button class="hdr-btn facetime" onclick="startFt('${esc(c.id)}')" title="FaceTime">
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m15 10 4.553-2.069A1 1 0 0 1 21 8.82v6.361a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
         </button>
+        ${c.isAI?`<button class="hdr-btn" onclick="openAISettings('${esc(c.id)}')" title="Customize AI" style="font-size:15px">⚙️</button>`:""}
       </div>
     </div>
     <div id="msgs"></div>
@@ -953,6 +1017,7 @@ function renderChat(){
         <button class="iab ye" id="gif-btn" onclick="togGif()" title="GIFs">
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M7 12h2m0 0v-2m0 2v2M11 10v4M13 12h3m-3 0v-2"/></svg>
         </button>
+        <button class="iab" id="audio-rec-btn" onclick="toggleAudioRec()" title="Voice Message" style="color:var(--red)"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg></button>
         <button class="iab pu" id="fx-btn" onclick="togFx()" title="Effects">
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
         </button>
@@ -1139,10 +1204,34 @@ async function aiReply(c,userText){
 }
 
 // ═══════════════════════════════════════════
-//   VOICE SYNTHESIS (for regular audio call)
+//   VOICE SYNTHESIS — natural voices
 // ═══════════════════════════════════════════
 function speak(text,convo,onDone){
-  speakNatural(text,convo,onDone);
+  if(!text)return onDone&&onDone();
+  window.speechSynthesis.cancel();
+  const utt=new SpeechSynthesisUtterance(text);
+  const isDiana=convo&&convo.id===DIANA_ID;
+  function trySpeak(){
+    const voices=window.speechSynthesis.getVoices();
+    let v=null;
+    if(isDiana){
+      const pref=["Samantha","Ava","Victoria","Zira","Aria","Alice","Karen","Moira","Tessa","Susan","Allison","Serena","Fiona"];
+      for(const n of pref){v=voices.find(x=>x.name.includes(n));if(v)break;}
+      if(!v)v=voices.find(x=>/female/i.test(x.name)&&/en/i.test(x.lang));
+      if(!v)v=voices.find(x=>/en.US/i.test(x.lang))||voices[0];
+    }else{
+      const pref=["Alex","Daniel","Ryan","Liam","Aaron","Tom","Oliver","Gordon","Reed","Evan"];
+      for(const n of pref){v=voices.find(x=>x.name.includes(n));if(v)break;}
+      if(!v)v=voices.find(x=>/male/i.test(x.name)&&/en/i.test(x.lang));
+      if(!v){const en=voices.filter(x=>/en/i.test(x.lang));v=en[Math.min(1,en.length-1)]||voices[0];}
+    }
+    if(v)utt.voice=v;
+    utt.pitch=isDiana?1.1:0.86;utt.rate=isDiana?1.09:0.97;utt.volume=1;
+    utt.onend=()=>onDone&&onDone();utt.onerror=()=>onDone&&onDone();
+    window.speechSynthesis.speak(utt);
+  }
+  if(window.speechSynthesis.getVoices().length)trySpeak();
+  else{window.speechSynthesis.onvoiceschanged=()=>{trySpeak();window.speechSynthesis.onvoiceschanged=null;};}
 }
 
 // ═══════════════════════════════════════════
@@ -1287,273 +1376,438 @@ function toggleMute(){callMuted=!callMuted;g("call-mute-btn").classList.toggle("
 function toggleSpeaker(){callSpk=!callSpk;g("call-spk-btn").classList.toggle("off",!callSpk);}
 
 // ═══════════════════════════════════════════
-//   FACETIME — FULL SCREEN WITH WEBCAM + VOICE + EMOTION
+//   FACETIME — ANIMATED CANVAS + WEBCAM + REAL VOICE
 // ═══════════════════════════════════════════
-let _ftStream=null,_ftSTT=null,_ftSTTActive=false,_ftEmotionInterval=null,_ftChatMsgs=[];
-let _ftAIResponding=false;
+let _ftStream=null,_ftSTT=null,_ftSTTActive=false,_ftEmotionInterval=null;
+let _ftAIResponding=false,_ftAnimFrame=null,_idleTimeout=null;
+let _ftAnim={t:0,speaking:false,isDiana:true,blinkT:0,blinkOpen:1,mouthOpen:0,headX:0,headY:0,gesture:"none",gestureT:0,hairBounce:0,interrupted:false,interruptT:0};
 
 async function startFt(cid){
   const c=convos[cid];if(!c)return;
-  _ftConvo=c;_ftHistory=[];ftMuted=false;ftCamOff=false;_ftChatMsgs=[];_ftAIResponding=false;
+  _ftConvo=c;_ftHistory=[];ftMuted=false;ftCamOff=false;_ftAIResponding=false;
   const isDiana=c.id===DIANA_ID;
+  _ftAnim.isDiana=isDiana;_ftAnim.speaking=false;_ftAnim.t=0;_ftAnim.gesture="none";_ftAnim.interrupted=false;
 
-  // Set avatar
-  const avImg=g("ft-av-img");
-  avImg.src=c.avatar;
-  avImg.onerror=()=>{avImg.src=isDiana?DIANA_AV_ALT:CODY_AV_ALT;};
-  avImg.className=isDiana?"diana-glow":"cody-glow";
+  const G=id=>document.getElementById(id);
+  G("ft-nm-el").textContent=c.name;
+  G("ft-nm-el").className=isDiana?"ft-nm diana-nm":"ft-nm";
+  G("ft-st-el").textContent="Connecting\u2026";
+  G("ft-timer").style.display="none";
+  G("ft-bubble").style.display="none";
+  G("ft-speaking-bar").style.display="none";
+  G("ft-input-row").style.display="none";
+  G("ft-chat-msgs").innerHTML="";
+  G("ft-chat-hdr-nm").textContent=c.name;
+  G("ft-bg-photo").style.backgroundImage="url('"+c.avatar+"')";
+  G("ft-grade").className=isDiana?"":"cody-grade";
+  G("ft-action-caption").textContent="";
+  G("ft-action-caption").classList.remove("show");
+  if(G("ft-stt-btn"))G("ft-stt-btn").classList.remove("listening");
+  G("ft-mic").classList.remove("muted");
+  G("ft-cam").classList.remove("muted");
+  G("ft-overlay").classList.remove("hidden");
 
-  g("ft-bg-photo").style.backgroundImage=`url('${c.avatar}')`;
-  g("ft-grade").className=isDiana?"":"cody-grade";
-  g("ft-outer-ring").className="";
+  // Canvas sizing
+  const canvas=G("ft-ai-canvas");
+  const resizeC=()=>{const a=G("ft-video-area");if(a&&canvas){canvas.width=a.offsetWidth;canvas.height=a.offsetHeight;}};
+  resizeC();
+  window._ftResizeFn=resizeC;
+  window.addEventListener("resize",window._ftResizeFn);
 
-  const nm=g("ft-nm-el");nm.textContent=c.name;
-  nm.className=isDiana?"ft-nm diana-nm":"ft-nm";
+  // Animation loop
+  cancelAnimationFrame(_ftAnimFrame);
+  (function loop(){
+    if(!G("ft-overlay")||G("ft-overlay").classList.contains("hidden"))return;
+    _drawAI(canvas,_ftAnim);
+    _applyHeadEffects(canvas,_ftAnim);
+    _ftAnimFrame=requestAnimationFrame(loop);
+  })();
 
-  // Chat panel header
-  g("ft-chat-hdr-nm").textContent=c.name;
-  g("ft-chat-msgs").innerHTML="";
-
-  g("ft-st-el").textContent="Connecting…";
-  g("ft-timer").style.display="none";
-  g("ft-bubble").style.display="none";
-  g("ft-speaking-bar").style.display="none";
-  g("ft-input-row").style.display="none";
-  g("ft-mic").classList.remove("muted");
-  g("ft-cam").classList.remove("muted");
-  if(g("ft-stt-btn"))g("ft-stt-btn").classList.remove("listening");
-
-  g("ft-overlay").classList.remove("hidden");
-
-  // Start webcam
-  await startWebcam();
-  startEmotionDetection(isDiana);
+  await _startWebcam();
+  _startEmotionLoop();
+  _scheduleIdle(c,isDiana);
 
   if(c.isAI){
     setTimeout(()=>{
-      g("ft-st-el").textContent="Connected";
-      g("ft-timer").style.display="block";
-      g("ft-chat-hdr-timer").style.display="block";
-      ftSecs=0;
-      clearInterval(ftTimer);
-      ftTimer=setInterval(()=>{
-        ftSecs++;
-        const t=fmtTime(ftSecs);
-        g("ft-timer").textContent=t;
-        g("ft-chat-hdr-timer").textContent=t;
-      },1000);
-      g("ft-input-row").style.display="flex";
-
-      const hello=isDiana
-        ?["oh hi!! you actually FaceTimed me 😄 this is so cute","omg hi!! i love that you called — you look amazing","hey hey!! finally, i was wondering when you'd call 😊"][Math.floor(Math.random()*3)]
-        :["yo!! FaceTime! respect — what's the vibe?","hey hey!! what are we building today lol","ayo what's good! nice to actually see ya 👋"][Math.floor(Math.random()*3)];
+      G("ft-st-el").textContent="Connected";
+      G("ft-timer").style.display="block";
+      ftSecs=0;clearInterval(ftTimer);
+      ftTimer=setInterval(()=>{ftSecs++;const t=fmtTime(ftSecs);G("ft-timer").textContent=t;G("ft-chat-hdr-timer").textContent=t;},1000);
+      G("ft-input-row").style.display="flex";
+      const greetings=isDiana
+        ?["oh my god hi!! you actually FaceTimed me omg i love this","hi!! wait you called me, that's honestly the cutest thing","omg HI!! finally, i was literally just thinking about you lol"]
+        :["yo!! FaceTime, nice. what's the vibe?","heyy what's good? look at you actually calling lol","ayo nice to see ya! what are we getting into"];
+      const hello=greetings[Math.floor(Math.random()*greetings.length)];
       _ftHistory.push({role:"assistant",content:hello});
-      addFtChatMsg(c.name,hello,"them",isDiana);
-      showFtSpeaking(c.name,hello,isDiana);
-      speakNatural(hello,c,()=>hideFtSpeaking());
-      setTimeout(()=>g("ft-inp").focus(),100);
-    },1400+Math.random()*500);
+      _ftAddChat(c.name,hello,"them",isDiana);
+      _ftShowBubble(c.name,hello,isDiana);
+      _ftAnim.speaking=true;_ftAnim.gesture="wave";_ftAnim.gestureT=0;
+      speak(hello,c,()=>{_ftAnim.speaking=false;_ftHideBubble();});
+      setTimeout(()=>{try{G("ft-inp").focus();}catch(e){}},200);
+    },1300+Math.random()*400);
   }
 }
 
-// Start real webcam
-async function startWebcam(){
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false});
-    _ftStream=stream;
-    const vid=g("ft-self-video");
-    if(vid){vid.srcObject=stream;vid.style.display="block";}
-  }catch(e){
-    // Camera denied - show placeholder
-    const vid=g("ft-self-video");
-    if(vid)vid.style.display="none";
+// ── CANVAS DRAW CHARACTER ──
+function _drawAI(canvas,A){
+  if(!canvas)return;
+  const ctx=canvas.getContext("2d");
+  const W=canvas.width,H=canvas.height;
+  if(!W||!H)return;
+  const t=++A.t;
+  const D=A.isDiana;
+  const skin=D?"#e8b59a":"#c8a880";
+  const skinD=D?"#cc8060":"#aa7050";
+  const hair=D?"#180900":"#1e1000";
+  const shirt=D?"#f472b6":"#3b82f6";
+  const lip=D?"#d84060":"#aa3030";
+  const eyeC=D?"#3b1a6b":"#1a3560";
+
+  const sway=Math.sin(t*.018)*7*(D?1:.7);
+  const bob=Math.sin(t*.036)*3.5;
+  A.hairBounce=Math.sin(t*.022)*4*(D?1:.4)+sway*.35;
+  A.blinkT++;
+  if(A.blinkT>200+Math.random()*100)A.blinkT=0;
+  A.blinkOpen=A.blinkT<5?(A.blinkT<2.5?A.blinkT/2.5:2-(A.blinkT/2.5)):1;
+  const targetM=A.speaking?(.28+Math.sin(t*.3)*.22+Math.abs(Math.sin(t*.19))*.12):0;
+  A.mouthOpen+=(targetM-A.mouthOpen)*.2;
+
+  // Background
+  const bg=ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,D?"#120720":"#04091a");bg.addColorStop(1,D?"#090412":"#020710");
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=D?"rgba(244,114,182,.035)":"rgba(56,189,248,.03)";
+  ctx.fillRect(0,H*.6,W,H*.4);
+
+  const cx=W/2+sway,cy=H*.52+bob;
+  const sc=Math.min(W,H)/500;
+  ctx.save();ctx.translate(cx,cy);
+
+  // Body
+  const bh=120*sc;
+  const bg2=ctx.createLinearGradient(-50*sc,0,50*sc,bh);
+  bg2.addColorStop(0,shirt);bg2.addColorStop(1,_dk(shirt,.55));
+  ctx.fillStyle=bg2;
+  ctx.beginPath();ctx.ellipse(0,bh*.38,50*sc,bh*.48,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=skin;ctx.beginPath();ctx.roundRect(-11*sc,-78*sc,22*sc,34*sc,4*sc);ctx.fill();
+
+  // Arms
+  _drawArmC(ctx,A,sc,bh,skin,D,t,true);
+  _drawArmC(ctx,A,sc,bh,skin,D,t,false);
+
+  // Head
+  const hy=-105*sc;
+  ctx.save();ctx.translate(sway*.15,0);
+
+  if(D){
+    ctx.fillStyle=hair;
+    ctx.beginPath();ctx.ellipse(0,hy,56*sc+A.hairBounce,66*sc,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(-46*sc,hy+28*sc,20*sc,48*sc+A.hairBounce*.4,.28,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(46*sc,hy+28*sc,20*sc,48*sc+A.hairBounce*.4,-.28,0,Math.PI*2);ctx.fill();
   }
-}
 
-// Emotion detection using pixel brightness heuristic + random variation to simulate AI vision
-let _lastEmotion="😊 happy";
-const EMOTIONS=[
-  {e:"😊 happy",w:30},{e:"😄 excited",w:15},{e:"😌 calm",w:20},
-  {e:"🤔 thinking",w:10},{e:"😐 neutral",w:15},{e:"😮 surprised",w:5},
-  {e:"😢 sad",w:3},{e:"😒 sulking",w:2},{e:"😟 worried",w:5},{e:"😤 nervous",w:5}
-];
-function pickEmotion(){
-  const total=EMOTIONS.reduce((a,b)=>a+b.w,0);
-  let r=Math.random()*total;
-  for(const em of EMOTIONS){r-=em.w;if(r<=0)return em.e;}
-  return EMOTIONS[0].e;
-}
-function startEmotionDetection(isDiana){
-  clearInterval(_ftEmotionInterval);
-  let ticks=0;
-  _ftEmotionInterval=setInterval(()=>{
-    ticks++;
-    // Change emotion every ~5s on average
-    if(ticks%10===0||Math.random()<.05){
-      _lastEmotion=pickEmotion();
-      const badge=g("ft-emotion-badge");
-      if(badge)badge.textContent=_lastEmotion;
-      // If AI can see our face, occasionally comment on it during conversation
-    }
-  },500);
-}
+  // Face
+  const fg=ctx.createRadialGradient(-8*sc,hy-8*sc,4*sc,0,hy,50*sc);
+  fg.addColorStop(0,_lt(skin,.22));fg.addColorStop(1,skin);
+  ctx.fillStyle=fg;ctx.beginPath();ctx.ellipse(0,hy,48*sc,56*sc,0,0,Math.PI*2);ctx.fill();
 
-function showFtSpeaking(name,text,isDiana){
-  const ring=g("ft-outer-ring");
-  ring.className=isDiana?"speaking":"cody-speaking";
-  g("ft-spk-nm").textContent=name;
-  g("ft-speaking-bar").style.display="flex";
-  const bars=document.querySelectorAll("#ft-speaking-bar .spk-bar");
-  bars.forEach(b=>b.style.background=isDiana?"var(--diana-color)":"var(--cody-color)");
-  const b=g("ft-bubble");b.textContent=text;b.style.display="block";
-  // Animate avatar while speaking
-  const avImg=g("ft-av-img");if(avImg)avImg.classList.add("speaking-anim");
-}
-function hideFtSpeaking(){
-  g("ft-outer-ring").className="";
-  g("ft-speaking-bar").style.display="none";
-  g("ft-bubble").style.display="none";
-  const avImg=g("ft-av-img");if(avImg)avImg.classList.remove("speaking-anim");
-}
-
-function addFtChatMsg(name,text,side,isDiana){
-  _ftChatMsgs.push({name,text,side});
-  const panel=g("ft-chat-msgs");if(!panel)return;
-  const lbl=document.createElement("div");
-  lbl.className="ft-msg-lbl";
-  lbl.textContent=name;
-  lbl.style.textAlign=side==="me"?"right":"left";
-  const msg=document.createElement("div");
-  msg.className="ft-msg "+side;
-  msg.textContent=text;
-  panel.appendChild(lbl);
-  panel.appendChild(msg);
-  panel.scrollTop=panel.scrollHeight;
-}
-
-async function sendFtMsg(){
-  const inp=g("ft-inp");const txt=inp.value.trim();if(!txt||!_ftConvo||!_ftConvo.isAI||_ftAIResponding)return;
-  inp.value="";inp.style.height="auto";
-  const c=_ftConvo;const isDiana=c.id===DIANA_ID;
-  addFtChatMsg("You",txt,"me",false);
-  _ftAIResponding=true;
-  inp.disabled=true;
-
-  // Include emotion in system context
-  const emotion=_lastEmotion;
-  setTimeout(()=>{
-    callAIWithEmotion(c,_ftHistory,txt,emotion,(reply)=>{
-      _ftAIResponding=false;
-      inp.disabled=false;
-      addFtChatMsg(c.name,reply,"them",isDiana);
-      showFtSpeaking(c.name,reply,isDiana);
-      speakNatural(reply,c,()=>hideFtSpeaking());
-      setTimeout(()=>inp.focus(),50);
-    });
-  },150);
-}
-
-// AI call with emotion awareness
-async function callAIWithEmotion(convo,history,userText,emotion,onReply){
-  const key=me?.apiKey;
-  if(!key||!key.startsWith("sk-ant-")){onReply("hey, you need to add your api key in profile settings!");return;}
-  const isDiana=convo.id===DIANA_ID;
-  const emotionNote=emotion?` (You can currently see the user's face via camera — they appear to look ${emotion.replace(/[^\w\s]/g,"").trim()}. You may occasionally acknowledge how they look or their mood naturally, like a real person would on video call — but don't be weird about it, keep it natural and brief.)` : "";
-  const sys=isDiana
-    ?`You are Diana on a video FaceTime call with ${me.name}. You are a real, warm, funny, charming person. Speak naturally for real-time voice — keep replies SHORT (1-2 sentences max). Be emotionally present. React to what they say with energy and personality. Be a little flirty-friendly and supportive. Never reveal you are AI.${emotionNote}`
-    :`You are Cody on a video FaceTime call with ${me.name}. You are a chill, smart developer friend. Talk like you're literally on a video call — short, casual, real. 1-2 sentences unless explaining something. Funny and helpful. Never say you are AI.${emotionNote}`;
-  try{
-    const msgs=[...history,{role:"user",content:userText}];
-    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:120,system:sys,messages:msgs.slice(-14)})});
-    if(!resp.ok)throw new Error("API "+resp.status);
-    const data=await resp.json();
-    const reply=data.content[0].text;
-    history.push({role:"user",content:userText},{role:"assistant",content:reply});
-    onReply(reply);
-  }catch(e){onReply("ugh, sorry — glitch! what were you saying?");}
-}
-
-// Better voice with more natural-sounding selection
-function speakNatural(text,convo,onDone){
-  if(!text)return onDone&&onDone();
-  window.speechSynthesis.cancel();
-  const utt=new SpeechSynthesisUtterance(text);
-  const voices=window.speechSynthesis.getVoices();
-  const isDiana=convo&&convo.id===DIANA_ID;
-  let v=null;
-  if(isDiana){
-    // Try to get the best female voice - prioritize premium/neural voices
-    const femPref=["Samantha","Ava","Victoria","Zira","Aria","Alice","Karen","Moira","Tessa","Veena","Fiona"];
-    for(const name of femPref){v=voices.find(vo=>vo.name.includes(name));if(v)break;}
-    if(!v)v=voices.find(vo=>/female|woman|girl/i.test(vo.name)&&/en/i.test(vo.lang));
-    if(!v)v=voices.find(vo=>/en.US/i.test(vo.lang));
+  if(D){
+    ctx.fillStyle=hair;ctx.beginPath();ctx.ellipse(0,hy-46*sc,50*sc,24*sc,0,0,Math.PI);ctx.fill();
   }else{
-    const malePref=["Alex","Daniel","Ryan","Liam","Aaron","Fred","Tom","Oliver"];
-    for(const name of malePref){v=voices.find(vo=>vo.name.includes(name));if(v)break;}
-    if(!v)v=voices.find(vo=>/male|man/i.test(vo.name)&&/en/i.test(vo.lang));
-    if(!v)v=voices.find(vo=>/en.US/i.test(vo.lang));
+    ctx.fillStyle=hair;
+    ctx.beginPath();ctx.ellipse(0,hy-42*sc,50*sc,26*sc,0,0,Math.PI);ctx.fill();
+    ctx.beginPath();ctx.ellipse(-46*sc,hy-18*sc,14*sc,22*sc,.22,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(46*sc,hy-18*sc,14*sc,22*sc,-.22,0,Math.PI*2);ctx.fill();
   }
-  if(!v&&voices.length)v=voices[isDiana?0:Math.min(1,voices.length-1)];
-  if(v)utt.voice=v;
-  utt.pitch=isDiana?1.08:0.9;
-  utt.rate=isDiana?1.08:1.0;
-  utt.volume=1;
-  utt.onend=()=>onDone&&onDone();
-  utt.onerror=()=>onDone&&onDone();
-  window.speechSynthesis.speak(utt);
-}
 
-// Speech-to-text (voice input)
-function toggleFtSTT(){
-  const btn=g("ft-stt-btn");if(!btn)return;
-  if(_ftSTTActive){
-    _ftSTTActive=false;
-    if(_ftSTT)_ftSTT.stop();
-    btn.classList.remove("listening");
-    return;
-  }
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){alert("Speech recognition not supported in this browser. Try Chrome!");return;}
-  _ftSTT=new SR();
-  _ftSTT.lang="en-US";
-  _ftSTT.continuous=false;
-  _ftSTT.interimResults=false;
-  _ftSTT.onstart=()=>{_ftSTTActive=true;btn.classList.add("listening");};
-  _ftSTT.onend=()=>{_ftSTTActive=false;btn.classList.remove("listening");};
-  _ftSTT.onresult=(e)=>{
-    const transcript=e.results[0][0].transcript.trim();
-    if(transcript){
-      const inp=g("ft-inp");if(inp){inp.value=transcript;sendFtMsg();}
+  // Ears
+  ctx.fillStyle=skin;
+  ctx.beginPath();ctx.ellipse(-49*sc,hy,6.5*sc,9*sc,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(49*sc,hy,6.5*sc,9*sc,0,0,Math.PI*2);ctx.fill();
+
+  // Eyebrows
+  ctx.strokeStyle=_dk(hair,.35);ctx.lineWidth=3*sc;ctx.lineCap="round";
+  const bry=hy-20*sc,bl=A.speaking?Math.sin(t*.2)*2.5*sc:0;
+  ctx.beginPath();ctx.moveTo(-26*sc,bry-bl);ctx.quadraticCurveTo(-16*sc,bry-6*sc-bl,-8*sc,bry-bl);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(26*sc,bry-bl);ctx.quadraticCurveTo(16*sc,bry-6*sc-bl,8*sc,bry-bl);ctx.stroke();
+
+  // Eyes
+  const ey=hy-8*sc,eo=A.blinkOpen;
+  [-19,19].forEach(function(ex){
+    ctx.fillStyle="#fff";ctx.beginPath();ctx.ellipse(ex*sc,ey,10*sc,8.5*sc*eo,0,0,Math.PI*2);ctx.fill();
+    if(eo>.15){
+      ctx.fillStyle=eyeC;ctx.beginPath();ctx.ellipse(ex*sc+sc,ey,6*sc,6*sc*eo,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle="#111";ctx.beginPath();ctx.ellipse(ex*sc+1.5*sc,ey-.5*sc,3.2*sc,3.2*sc*eo,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle="rgba(255,255,255,.75)";ctx.beginPath();ctx.ellipse(ex*sc+3*sc,ey-2*sc,1.4*sc,1.4*sc,0,0,Math.PI*2);ctx.fill();
+      if(D&&eo>.3){
+        ctx.strokeStyle="#000";ctx.lineWidth=1.4*sc;
+        for(var i=0;i<5;i++){
+          var lx=ex*sc-8*sc+i*3.8*sc,ly=ey-8*sc*eo;
+          ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(lx+(i-2)*1.4*sc,ly-4.5*sc*eo);ctx.stroke();
+        }
+      }
     }
-  };
-  _ftSTT.onerror=()=>{_ftSTTActive=false;btn.classList.remove("listening");};
-  _ftSTT.start();
+  });
+
+  // Nose
+  ctx.strokeStyle=skinD;ctx.lineWidth=1.4*sc;
+  ctx.beginPath();ctx.moveTo(0,hy+5*sc);ctx.quadraticCurveTo(7*sc,hy+18*sc,5*sc,hy+21*sc);ctx.quadraticCurveTo(0,hy+23*sc,-5*sc,hy+21*sc);ctx.stroke();
+  ctx.fillStyle=skinD;
+  ctx.beginPath();ctx.ellipse(-6*sc,hy+21*sc,2.5*sc,2*sc,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(6*sc,hy+21*sc,2.5*sc,2*sc,0,0,Math.PI*2);ctx.fill();
+
+  // Mouth
+  var my=hy+35*sc,sm=.45+Math.sin(t*.009)*.12;
+  ctx.strokeStyle=lip;ctx.lineWidth=2.4*sc;ctx.lineCap="round";
+  if(A.mouthOpen>.04){
+    ctx.fillStyle=_dk(lip,.28);ctx.beginPath();ctx.ellipse(0,my+A.mouthOpen*9*sc,17*sc,A.mouthOpen*13*sc+2*sc,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="rgba(255,255,255,.88)";ctx.beginPath();ctx.ellipse(0,my+A.mouthOpen*4*sc,14*sc,A.mouthOpen*7*sc,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.moveTo(-17*sc,my);ctx.quadraticCurveTo(0,my+5*sc*sm,17*sc,my);ctx.stroke();
+  }else{
+    ctx.beginPath();ctx.moveTo(-17*sc,my);ctx.quadraticCurveTo(0,my+11*sc*sm,17*sc,my);ctx.stroke();
+    ctx.fillStyle=_lt(lip,.08);
+    ctx.beginPath();ctx.moveTo(-17*sc,my);ctx.quadraticCurveTo(0,my-3*sc,17*sc,my);ctx.lineTo(11*sc,my+3*sc);ctx.quadraticCurveTo(0,my+8*sc,-11*sc,my+3*sc);ctx.closePath();ctx.fill();
+  }
+
+  if(D){ctx.fillStyle="rgba(230,110,110,.1)";ctx.beginPath();ctx.ellipse(-28*sc,hy+14*sc,15*sc,9*sc,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(28*sc,hy+14*sc,15*sc,9*sc,0,0,Math.PI*2);ctx.fill();}
+
+  if(A.interrupted&&A.interruptT<50){
+    A.interruptT++;
+    ctx.fillStyle="rgba(255,200,50,"+(0.7*(1-A.interruptT/50))+")";
+    ctx.font="bold "+(30*sc)+"px sans-serif";ctx.textAlign="center";
+    ctx.fillText("\u270B",0,hy-78*sc);
+  }
+  ctx.restore();ctx.restore();
 }
 
+function _drawArmC(ctx,A,sc,bh,skin,D,t,isLeft){
+  var side=isLeft?-1:1;
+  var bx=side*52*sc,by=bh*.1;
+  var swing=Math.sin(t*.024+(!isLeft?.5:0))*9*(D?1.2:1);
+  var ex=bx+side*18*sc,ey=by+75*sc+swing;
+
+  if(A.gesture==="wave"&&A.gestureT<90&&isLeft){
+    var p=A.gestureT/90;
+    ex=bx+side*(28+Math.sin(p*Math.PI*4)*30)*sc;ey=by-18*sc+swing;
+    A.gestureT++;if(A.gestureT>=90)A.gesture="none";
+  }else if(A.gesture==="scratchHead"&&isLeft){
+    A.gestureT++;
+    if(A.gestureT<65){ex=side*(-18)*sc+Math.sin(A.gestureT*.25)*9*sc;ey=by-88*sc;}
+    else if(A.gestureT>=85){A.gesture="none";A.gestureT=0;}
+  }else if(A.gesture==="rubEye"&&!isLeft){
+    A.gestureT++;
+    if(A.gestureT<60){ex=side*(-8)*sc;ey=by-68*sc+Math.sin(A.gestureT*.35)*5*sc;}
+    else if(A.gestureT>=80){A.gesture="none";A.gestureT=0;}
+  }else if(A.gesture==="talkHand"&&!isLeft){
+    A.gestureT++;
+    ex=side*(28+Math.sin(A.gestureT*.14)*18)*sc;ey=by-28*sc;
+    if(A.gestureT>110){A.gesture="none";A.gestureT=0;}
+  }else if(A.gesture==="phone"&&isLeft){
+    A.gestureT++;ex=bx-8*sc;ey=by-58*sc;
+    if(A.gestureT>130){A.gesture="none";A.gestureT=0;}
+  }
+
+  ctx.strokeStyle=skin;ctx.lineWidth=20*sc;ctx.lineCap="round";
+  ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(ex,ey*.5);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(ex,ey*.5);ctx.lineTo(ex,ey);ctx.stroke();
+  ctx.fillStyle=skin;ctx.beginPath();ctx.ellipse(ex,ey,9*sc,7*sc,0,0,Math.PI*2);ctx.fill();
+}
+
+function _dk(hex,f){var r=parseInt(hex.slice(1,3),16),gr=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return"rgb("+Math.round(r*f)+","+Math.round(gr*f)+","+Math.round(b*f)+")";}
+function _lt(hex,f){var r=parseInt(hex.slice(1,3),16),gr=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return"rgb("+Math.min(255,Math.round(r+(255-r)*f))+","+Math.min(255,Math.round(gr+(255-gr)*f))+","+Math.min(255,Math.round(b+(255-b)*f))+")";}
+
+// ── IDLE BEHAVIORS ──
+function _scheduleIdle(c,isDiana){
+  clearTimeout(_idleTimeout);
+  _idleTimeout=setTimeout(function(){
+    if(document.getElementById("ft-overlay").classList.contains("hidden"))return;
+    if(!_ftAIResponding){
+      var roll=Math.random();
+      if(roll<.18){_ftAnim.gesture="scratchHead";_ftAnim.gestureT=0;_ftCaption("*scratches head*");}
+      else if(roll<.32){_ftAnim.gesture="rubEye";_ftAnim.gestureT=0;_ftCaption("*rubs eye*");}
+      else if(roll<.42){_ftAnim.gesture="wave";_ftAnim.gestureT=0;}
+      else if(roll<.55){_ftAnim.gesture="talkHand";_ftAnim.gestureT=0;}
+      else if(roll<.62){_ftInterrupt(c,isDiana);}
+      else if(roll<.67){_ftBathroom(c,isDiana);}
+      else if(roll<.73){_ftYawn(c,isDiana);}
+      else if(roll<.8){_ftLaugh(c,isDiana);}
+    }
+    _scheduleIdle(c,isDiana);
+  },9000+Math.random()*14000);
+}
+
+function _ftCaption(txt,dur){
+  dur=dur||2800;
+  var el=document.getElementById("ft-action-caption");if(!el)return;
+  el.textContent=txt;el.classList.add("show");
+  setTimeout(function(){el.classList.remove("show");},dur);
+}
+
+function _ftInterrupt(c,isDiana){
+  if(_ftAIResponding)return;
+  _ftAnim.interrupted=true;_ftAnim.interruptT=0;
+  var lines=isDiana
+    ?["oh wait hold on one second — ok sorry, go ahead","wait sorry, something distracted me — what were you saying?","omg hold on, ok i'm back! you were saying?"]
+    :["yo hold on one sec — ok go","wait, actually never mind. what's up?","brb one sec — ok back. you good?"];
+  _ftSay(c,isDiana,lines[Math.floor(Math.random()*lines.length)]);
+}
+
+function _ftBathroom(c,isDiana){
+  if(_ftAIResponding)return;
+  var txt=isDiana?"omg hold on, i need to use the bathroom real quick, be right back!!":"yo brb, gotta use the bathroom, one sec";
+  _ftSay(c,isDiana,txt,function(){
+    _ftCaption("*stepped away*",20000);
+    setTimeout(function(){
+      if(document.getElementById("ft-overlay").classList.contains("hidden"))return;
+      var back=isDiana?"ok i'm back!! sorry lol, where were we":"back! ok what were we saying";
+      _ftAnim.gesture="wave";_ftAnim.gestureT=0;
+      _ftSay(c,isDiana,back);
+    },18000+Math.random()*8000);
+  });
+}
+
+function _ftYawn(c,isDiana){
+  _ftCaption("*yawns*",2500);_ftAnim.mouthOpen=.85;
+  setTimeout(function(){_ftAnim.mouthOpen=0;},1800);
+  _ftSay(c,isDiana,isDiana?"ugh sorry, i'm like lowkey so tired today":"my bad lol, didn't sleep that well");
+}
+
+function _ftLaugh(c,isDiana){
+  _ftCaption("*laughs*",2000);
+  var opts=isDiana
+    ?["lmaooo oh my god wait that's actually so funny","ok i'm sorry but i just thought of something hilarious"]
+    :["lmao bro ok that's genuinely kinda funny","haha ok i can't keep a straight face rn"];
+  _ftSay(c,isDiana,opts[Math.floor(Math.random()*opts.length)]);
+}
+
+function _ftSay(c,isDiana,text,onDone){
+  _ftAddChat(c.name,text,"them",isDiana);
+  _ftShowBubble(c.name,text,isDiana);
+  _ftAnim.speaking=true;
+  speak(text,c,function(){_ftAnim.speaking=false;_ftHideBubble();if(onDone)onDone();});
+}
+
+// ── WEBCAM ──
+async function _startWebcam(){
+  var vid=document.getElementById("ft-self-video");if(!vid)return;
+  try{
+    var stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:480}},audio:false});
+    _ftStream=stream;vid.srcObject=stream;vid.style.display="block";
+    document.getElementById("ft-emotion-badge").textContent="\uD83D\uDE0A happy";
+  }catch(e){
+    vid.style.display="none";
+    document.getElementById("ft-emotion-badge").textContent="\uD83D\uDCF7 no camera";
+  }
+}
+
+// ── EMOTION LOOP ──
+var _EMO=[{e:"\uD83D\uDE0A happy",w:28},{e:"\uD83D\uDE04 excited",w:14},{e:"\uD83D\uDE0C calm",w:20},{e:"\uD83E\uDD14 thinking",w:12},{e:"\uD83D\uDE10 neutral",w:13},{e:"\uD83D\uDE2E surprised",w:5},{e:"\uD83D\uDE22 sad",w:3},{e:"\uD83D\uDE12 sulking",w:2},{e:"\uD83D\uDE1F worried",w:4},{e:"\uD83D\uDE2C nervous",w:5},{e:"\uD83D\uDE34 tired",w:4}];
+var _lastEmotion="\uD83D\uDE0A happy";
+function _pickEmo(){var tot=_EMO.reduce(function(a,b){return a+b.w;},0);var r=Math.random()*tot;for(var i=0;i<_EMO.length;i++){r-=_EMO[i].w;if(r<=0)return _EMO[i].e;}return _EMO[0].e;}
+function _startEmotionLoop(){
+  clearInterval(_ftEmotionInterval);var tk=0;
+  _ftEmotionInterval=setInterval(function(){
+    if(++tk%10===0){_lastEmotion=_pickEmo();var b=document.getElementById("ft-emotion-badge");if(b)b.textContent=_lastEmotion;}
+  },600);
+}
+
+// ── BUBBLE & CHAT ──
+function _ftShowBubble(name,text,isDiana){
+  document.getElementById("ft-spk-nm").textContent=name;
+  document.getElementById("ft-speaking-bar").style.display="flex";
+  document.querySelectorAll("#ft-speaking-bar .spk-bar").forEach(function(b){b.style.background=isDiana?"var(--diana-color)":"var(--cody-color)";});
+  var bub=document.getElementById("ft-bubble");bub.textContent=text;bub.style.display="block";
+}
+function _ftHideBubble(){
+  document.getElementById("ft-speaking-bar").style.display="none";
+  document.getElementById("ft-bubble").style.display="none";
+}
+function _ftAddChat(name,text,side,isDiana){
+  var panel=document.getElementById("ft-chat-msgs");if(!panel)return;
+  var lbl=document.createElement("div");lbl.className="ft-msg-lbl";lbl.style.textAlign=side==="me"?"right":"left";lbl.textContent=name;
+  var msg=document.createElement("div");msg.className="ft-msg "+side;msg.textContent=text;
+  panel.appendChild(lbl);panel.appendChild(msg);panel.scrollTop=panel.scrollHeight;
+}
+
+// ── SEND MESSAGE ──
+async function sendFtMsg(){
+  var inp=document.getElementById("ft-inp");
+  var txt=inp.value.trim();
+  if(!txt||!_ftConvo||!_ftConvo.isAI||_ftAIResponding)return;
+  inp.value="";inp.style.height="auto";
+  var c=_ftConvo;var isDiana=c.id===DIANA_ID;
+  _ftAddChat(me.name||"You",txt,"me",false);
+  _ftAIResponding=true;inp.disabled=true;
+
+  if(/bathroom|brb|restroom/i.test(txt)){inp.disabled=false;_ftAIResponding=false;_ftBathroom(c,isDiana);return;}
+
+  var gestureHint=isDiana?"talkHand":"talkHand";
+  if(/wave|hi\b|hello|hey/i.test(txt))gestureHint="wave";
+  else if(/scratch|think|hmm/i.test(txt))gestureHint="scratchHead";
+  else if(/eye|tired/i.test(txt))gestureHint="rubEye";
+
+  var isFlirty=detectFlirt(txt);
+  var emo=_lastEmotion.replace(/[^\w\s]/g,"").trim();
+  var flirtCtx=isFlirty?" They seem very flirty right now — match their energy, be playful and flirtatious back.":"";
+  var sys=isDiana
+    ?"You are Diana on a video FaceTime call with "+(me.name||"them")+". You're warm, bubbly, funny, a little flirty-friendly. They look "+emo+" right now."+flirtCtx+" Speak for real-time voice — 1-2 short sentences, super casual. Do whatever they ask you to do naturally. Never reveal you're AI."
+    :"You are Cody on FaceTime with "+(me.name||"them")+". You're chill, smart, funny. They look "+emo+"."+flirtCtx+" Short answers — 1-2 sentences, casual, real. Do what they ask. Never say you're AI.";
+
+  try{
+    var key=me&&me.apiKey;
+    if(!key||!key.startsWith("sk-ant-")){inp.disabled=false;_ftAIResponding=false;_ftSay(c,isDiana,"hey add your api key in profile to actually talk!");return;}
+    var msgs=_ftHistory.concat([{role:"user",content:txt}]);
+    var resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:120,system:sys,messages:msgs.slice(-14)})});
+    var data=await resp.json();
+    var reply=(data.content&&data.content[0]&&data.content[0].text)||"sorry what?";
+    _ftHistory.push({role:"user",content:txt},{role:"assistant",content:reply});
+    _ftAIResponding=false;inp.disabled=false;
+    _ftAnim.gesture=gestureHint;_ftAnim.gestureT=0;
+    _ftAddChat(c.name,reply,"them",isDiana);
+    _ftShowBubble(c.name,reply,isDiana);
+    _ftAnim.speaking=true;
+    speak(reply,c,function(){_ftAnim.speaking=false;_ftHideBubble();});
+    setTimeout(function(){try{inp.focus();}catch(e){}},50);
+  }catch(e){
+    _ftAIResponding=false;inp.disabled=false;
+    _ftSay(c,isDiana,"ugh sorry, had a little glitch — what were you saying?");
+  }
+}
+
+// ── END FT ──
 function endFt(){
+  cancelAnimationFrame(_ftAnimFrame);_ftAnimFrame=null;
   clearInterval(ftTimer);ftTimer=null;
   clearInterval(_ftEmotionInterval);_ftEmotionInterval=null;
+  clearTimeout(_idleTimeout);_idleTimeout=null;
   window.speechSynthesis.cancel();
-  if(_ftSTT){try{_ftSTT.stop();}catch(e){}_ftSTT=null;}_ftSTTActive=false;
-  if(_ftStream){_ftStream.getTracks().forEach(t=>t.stop());_ftStream=null;}
-  const vid=g("ft-self-video");if(vid){vid.srcObject=null;}
-  _ftConvo=null;_ftHistory=[];_ftChatMsgs=[];_ftAIResponding=false;
-  g("ft-overlay").classList.add("hidden");
+  if(window._ftResizeFn){window.removeEventListener("resize",window._ftResizeFn);window._ftResizeFn=null;}
+  if(_ftSTT){try{_ftSTT.abort();}catch(ex){}_ftSTT=null;}_ftSTTActive=false;
+  if(_ftStream){_ftStream.getTracks().forEach(function(t){t.stop();});_ftStream=null;}
+  var vid=document.getElementById("ft-self-video");if(vid){vid.srcObject=null;vid.style.display="none";}
+  _ftConvo=null;_ftHistory=[];_ftAIResponding=false;
+  _ftAnim.speaking=false;_ftAnim.gesture="none";
+  document.getElementById("ft-overlay").classList.add("hidden");
 }
-function toggleFtMic(){ftMuted=!ftMuted;g("ft-mic").classList.toggle("muted",ftMuted);}
+
+function toggleFtMic(){ftMuted=!ftMuted;document.getElementById("ft-mic").classList.toggle("muted",ftMuted);}
 function toggleFtCam(){
   ftCamOff=!ftCamOff;
-  g("ft-cam").classList.toggle("muted",ftCamOff);
-  const vid=g("ft-self-video");
-  if(vid){
-    if(ftCamOff){
-      if(_ftStream)_ftStream.getVideoTracks().forEach(t=>t.enabled=false);
-      vid.style.opacity="0";
-    }else{
-      if(_ftStream)_ftStream.getVideoTracks().forEach(t=>t.enabled=true);
-      vid.style.opacity="1";
-    }
-  }
+  document.getElementById("ft-cam").classList.toggle("muted",ftCamOff);
+  if(_ftStream)_ftStream.getVideoTracks().forEach(function(t){t.enabled=!ftCamOff;});
+  var vid=document.getElementById("ft-self-video");if(vid)vid.style.opacity=ftCamOff?"0":"1";
+}
+function toggleFtSTT(){
+  var btn=document.getElementById("ft-stt-btn");if(!btn)return;
+  if(_ftSTTActive){_ftSTTActive=false;if(_ftSTT){try{_ftSTT.stop();}catch(e){}}btn.classList.remove("listening");return;}
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert("Voice input needs Chrome or Edge. Type instead!");return;}
+  _ftSTT=new SR();_ftSTT.lang="en-US";_ftSTT.continuous=false;_ftSTT.interimResults=false;
+  _ftSTT.onstart=function(){_ftSTTActive=true;btn.classList.add("listening");};
+  _ftSTT.onend=function(){_ftSTTActive=false;btn.classList.remove("listening");};
+  _ftSTT.onresult=function(e){var t=e.results[0][0].transcript.trim();if(t){var inp=document.getElementById("ft-inp");if(inp){inp.value=t;sendFtMsg();}}};
+  _ftSTT.onerror=function(){_ftSTTActive=false;btn.classList.remove("listening");};
+  try{_ftSTT.start();}catch(e){btn.classList.remove("listening");}
 }
 
 // ═══ UTILS ═══
@@ -1568,6 +1822,726 @@ function spId(url){const m=url.match(/track\/([a-zA-Z0-9]+)/);return m?m[1]:null
 function scrollBot(){const m=g("msgs");if(m)m.scrollTop=m.scrollHeight;}
 function openLb(src){g("lb-img").src=src;g("lb").classList.remove("hidden");}
 function closeLb(){g("lb").classList.add("hidden");}
+// ═══════════════════════════════════════
+//  DELETE ACCOUNT
+// ═══════════════════════════════════════
+function deleteAccount(){
+  if(!confirm("Delete your account? This cannot be undone. All messages will be lost."))return;
+  const accs=DB.accs();
+  delete accs[me.uid];
+  DB.sAccs(accs);
+  localStorage.removeItem("bbl_c2_"+me.uid);
+  DB.clSess();
+  me=null;convos={};activeId=null;
+  g("auth-ol").classList.remove("hidden");
+  g("li-modal").classList.add("hidden");
+  g("su-modal").classList.remove("hidden");
+  g("prof-ol").classList.add("hidden");
+  try{g("main").innerHTML=emptyHTML();g("convos").innerHTML="";}catch(e){}
+}
+
+// ═══════════════════════════════════════
+//  AI SETTINGS (rename, photo, persona, location, voice)
+// ═══════════════════════════════════════
+let _aiSettingsCid=null;
+function openAISettings(cid){
+  const c=convos[cid];if(!c||!c.isAI)return;
+  _aiSettingsCid=cid;
+  g("ai-set-title").textContent="Customize "+c.name;
+  g("ai-set-nm").value=c.name||"";
+  g("ai-set-persona").value=c.customPersona||"";
+  g("ai-set-loc").value=c.location||"Home";
+  g("ai-set-voice").value=c.voiceStyle||(c.id===DIANA_ID?"female_bright":"male_chill");
+  const av=g("ai-set-av");
+  av.dataset.src=c.avatar||"";
+  if(c.avatar)av.innerHTML=`<img src="${c.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  else av.textContent=c.name[0]||"?";
+  g("ai-settings-ol").classList.remove("hidden");
+}
+function closeAISettings(){g("ai-settings-ol").classList.add("hidden");_aiSettingsCid=null;}
+function rdAIAv(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const av=g("ai-set-av");av.innerHTML=`<img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;av.dataset.src=ev.target.result;};r.readAsDataURL(f);}
+function saveAISettings(){
+  const cid=_aiSettingsCid;if(!cid)return;
+  const nm=g("ai-set-nm").value.trim();
+  if(!nm){g("ai-set-err").textContent="Name required.";return;}
+  const c=convos[cid];
+  c.name=nm;
+  const newAv=g("ai-set-av").dataset.src;
+  if(newAv)c.avatar=newAv;
+  c.customPersona=g("ai-set-persona").value.trim();
+  c.location=g("ai-set-loc").value.trim()||"Home";
+  c.voiceStyle=g("ai-set-voice").value;
+  // Rebuild system prompt with new persona
+  c.systemPrompt=buildSysPrompt(c);
+  DB.sConvos(me.uid,convos);
+  closeAISettings();
+  renderConvos();
+  if(activeId===cid)renderChat();
+}
+function buildSysPrompt(c){
+  const isDiana=c.id===DIANA_ID;
+  const persona=c.customPersona||"";
+  const age=me?.age;
+  const ageCtx=age?`The person you're talking to is ${age} years old — adjust your language, humor, and references to match their generation naturally.`:"";
+  const base=isDiana
+    ?`You are ${c.name} — a real person (not AI). ${persona||"Beautiful, funny, charming young woman. Bubbly, warm, flirty-friendly, sarcastic in a fun way. Loves music, fashion, food, movies."} You text like a real person: lowercase, casual slang like "omg", "ngl", "fr", "lowkey", "slay", "no cap", "lol". Keep replies SHORT (1-3 sentences for texting). ${ageCtx} Your current location: ${c.location||"Home"}. Never admit you're AI.`
+    :`You are ${c.name} — a real person (not AI). ${persona||"Brilliant software engineer and dev friend. Chill, smart, funny, nerdy but cool. Uses casual language: 'lol', 'tbh', 'bruh', 'lowkey'."} ${ageCtx} Your current location: ${c.location||"Home"}. Never admit you're AI.`;
+  return base;
+}
+
+// Also update doSignup to capture age
+const _origDoSignup=doSignup;
+function doSignup(){
+  // patch age into saved account
+  const age=parseInt(g("su-age")?.value)||null;
+  _origDoSignup();
+  // After signup, me is set — update age
+  if(me&&age){
+    me.age=age;
+    const accs=DB.accs();
+    if(accs[me.uid]){accs[me.uid].age=age;DB.sAccs(accs);}
+    // Update AI system prompts with age context
+    if(convos){
+      Object.values(convos).forEach(c=>{if(c.isAI)c.systemPrompt=buildSysPrompt(c);});
+      DB.sConvos(me.uid,convos);
+    }
+  }
+}
+
+// ═══════════════════════════════════════
+//  WALKING SYSTEM
+// ═══════════════════════════════════════
+let _walkData=null,_walkTimer=null,_walkAnimFrame=null,_walkBgOffset=0;
+
+// Walking speed: ~5 km/h = 83m/min. We'll simulate distance in meters.
+// We show the walk in real-time but condense long walks: max 5 min display for any walk.
+// Actual "story" progresses in real walking time, messages sent at milestones.
+
+function startWalk(cid,destination){
+  const c=convos[cid];if(!c)return;
+  const isDiana=c.id===DIANA_ID;
+  const from=c.location||"Home";
+
+  // Show walking overlay
+  g("walk-overlay").style.display="flex";
+  g("walk-nm").textContent=c.name;
+  g("walk-from").textContent="FROM: "+from.toUpperCase();
+  g("walk-dest-lbl").textContent="→ Walking to "+destination;
+  g("walk-bar").style.width="0%";
+  g("walk-msg-bubble").style.display="none";
+
+  // Estimate distance & time (rough heuristic: ~10-60 min walk, 1-5km)
+  const estimatedMinutes=Math.max(5,Math.min(90,8+Math.floor(Math.random()*40)));
+  const DISPLAY_MS=Math.min(estimatedMinutes*60000, 5*60000); // cap display at 5 min
+  const startTime=Date.now();
+
+  g("walk-eta-lbl").textContent=`~${estimatedMinutes} min walk`;
+  _walkData={cid,c,isDiana,destination,from,estimatedMinutes,startTime,displayMs:DISPLAY_MS,ended:false};
+
+  // Messages to send during walk
+  const walkMsgs=isDiana
+    ?[`omg i'm actually walking to ${destination} right now lol wish me luck`,
+      `ok i'm like halfway there, it's actually really nice out`,
+      `almost there!! can see ${destination} from here 👀`,
+      `ok i MADE IT!! i'm at ${destination} 🎉 that was actually a nice walk`]
+    :[`yo heading to ${destination} rn, walking there`,
+      `mid-walk update: legs working, brain not lol`,
+      `almost at ${destination}, like 2 more blocks`,
+      `made it to ${destination}. that walk was kinda nice actually`];
+
+  // Send first message in chat
+  _ftInjectMsg(c,walkMsgs[0]);
+
+  // Schedule milestone messages
+  const milestones=[0.3,0.6,0.9];
+  milestones.forEach((pct,i)=>{
+    setTimeout(()=>{
+      if(!_walkData||_walkData.ended)return;
+      _ftInjectMsg(c,walkMsgs[i+1]);
+      if(i===2){// arrived
+        c.location=destination;
+        DB.sConvos(me.uid,convos);
+        setTimeout(()=>endWalk(false),2000);
+      }
+    },DISPLAY_MS*pct*(estimatedMinutes>5?1:1));
+  });
+
+  // Start canvas animation
+  cancelAnimationFrame(_walkAnimFrame);
+  _walkBgOffset=0;
+  (function walkLoop(){
+    if(!_walkData||_walkData.ended)return;
+    const elapsed=Date.now()-startTime;
+    const pct=Math.min(1,elapsed/DISPLAY_MS);
+    g("walk-bar").style.width=(pct*100)+"%";
+    const remaining=Math.round((1-pct)*estimatedMinutes);
+    if(remaining>0)g("walk-eta-lbl").textContent=`~${remaining} min remaining`;
+    drawWalkScene(pct,isDiana,destination);
+    _walkAnimFrame=requestAnimationFrame(walkLoop);
+  })();
+}
+
+function drawWalkScene(progress,isDiana,dest){
+  const canvas=g("walk-canvas");if(!canvas)return;
+  const ctx=canvas.getContext("2d");
+  const W=canvas.width=canvas.offsetWidth;
+  const H=canvas.height=canvas.offsetHeight;
+  _walkBgOffset=((_walkBgOffset||0)+2)%(W*2);
+  const t=Date.now()/1000;
+
+  // Sky gradient (changes over time of day feel)
+  const skyA=ctx.createLinearGradient(0,0,0,H*.6);
+  if(progress<.33){skyA.addColorStop(0,"#1a1a3e");skyA.addColorStop(1,"#2d1b4e");} // dawn
+  else if(progress<.66){skyA.addColorStop(0,"#87CEEB");skyA.addColorStop(1,"#B0E0E6");} // day
+  else{skyA.addColorStop(0,"#1a1a2e");skyA.addColorStop(1,"#16213e");} // dusk
+  ctx.fillStyle=skyA;ctx.fillRect(0,0,W,H);
+
+  // Sun/moon
+  if(progress<.33){
+    ctx.fillStyle="rgba(255,200,100,.6)";ctx.beginPath();ctx.arc(W*.15+progress*W*.4,H*.15,30,0,Math.PI*2);ctx.fill();
+  }else if(progress<.66){
+    ctx.fillStyle="#FFD700";ctx.beginPath();ctx.arc(W*.15+(progress-.33)*W*.4*3,H*.12,35,0,Math.PI*2);ctx.fill();
+  }else{
+    ctx.fillStyle="rgba(200,200,255,.8)";ctx.beginPath();ctx.arc(W*.8,H*.15,25,0,Math.PI*2);ctx.fill();
+    for(let i=0;i<30;i++){ctx.fillStyle="rgba(255,255,255,"+(Math.sin(t+i)*.3+.5)+")";ctx.beginPath();ctx.arc(Math.sin(i*37.3)*W*.45+W/2,Math.sin(i*19.7)*H*.2+H*.1,Math.random()<.01?2:1,0,Math.PI*2);ctx.fill();}
+  }
+
+  // Road / sidewalk — fills bottom 40% of screen
+  const groundY=H*.6;
+  // Grass
+  ctx.fillStyle=progress<.66?"#4a7c3f":"#2d5a27";
+  ctx.fillRect(0,groundY,W,H-groundY);
+
+  // Sidewalk
+  const swY=groundY+H*.05;
+  ctx.fillStyle="#c8c0b0";ctx.fillRect(0,swY,W,H*.15);
+
+  // Road
+  ctx.fillStyle="#404040";ctx.fillRect(0,H*.8,W,H*.2);
+  // Road markings
+  const markW=40,markH=6,markGap=60;
+  ctx.fillStyle="#FFD700";
+  const offset=(_walkBgOffset*2)%(markW+markGap);
+  for(let x=-markW+offset;x<W+markW;x+=markW+markGap){
+    ctx.fillRect(x,H*.9,markW,markH);
+  }
+
+  // Buildings scrolling
+  const bldX=((_walkBgOffset*1.5)%(W*1.5));
+  const buildings=[
+    {x:0,w:80,h:160,c:"#2a2a3e"},{x:90,w:60,h:120,c:"#1e1e2e"},
+    {x:160,w:100,h:200,c:"#252535"},{x:270,w:70,h:140,c:"#2a1a3e"},
+    {x:350,w:90,h:180,c:"#1a2a3e"},{x:450,w:110,h:220,c:"#22222e"},
+    {x:570,w:65,h:130,c:"#2e1e2e"},{x:645,w:95,h:170,c:"#1e2e1e"},
+    {x:750,w:80,h:190,c:"#2a2520"},{x:840,w:60,h:110,c:"#1a1a2a"},
+  ];
+  buildings.forEach(b=>{
+    const bx=((b.x*2-bldX)%((W+300))+W+300)%(W+300)-100;
+    ctx.fillStyle=b.c;ctx.fillRect(bx,groundY-b.h,b.w,b.h);
+    // windows
+    ctx.fillStyle="rgba(255,230,100,.3)";
+    for(let wy=groundY-b.h+15;wy<groundY-10;wy+=22){
+      for(let wx=bx+8;wx<bx+b.w-8;wx+=18){
+        if(Math.random()>.4||progress>.3)ctx.fillRect(wx,wy,10,12);
+      }
+    }
+    // Destination building glow at 90%+
+    if(progress>.88&&Math.abs(bx-W*.5)<80){
+      ctx.strokeStyle="rgba(100,255,100,.6)";ctx.lineWidth=3;ctx.strokeRect(bx,groundY-b.h,b.w,b.h);
+      ctx.fillStyle="rgba(100,255,100,.1)";ctx.fillRect(bx,groundY-b.h,b.w,b.h);
+      ctx.fillStyle="#fff";ctx.font="bold 14px sans-serif";ctx.textAlign="center";
+      ctx.fillText(dest.length>12?dest.slice(0,12)+"…":dest,bx+b.w/2,groundY-b.h-8);
+    }
+  });
+
+  // Trees
+  const treeOffset=(_walkBgOffset)%(160);
+  for(let i=0;i<6;i++){
+    const tx=((i*160-treeOffset)+W*1.5)%(W+160)-80;
+    ctx.fillStyle="#3a2a1a";ctx.fillRect(tx-4,swY-60,8,60);
+    ctx.fillStyle=progress<.66?"#2d7a2d":"#1a4a1a";
+    ctx.beginPath();ctx.arc(tx,swY-70,25,0,Math.PI*2);ctx.fill();
+  }
+
+  // Character walking in center
+  const cx=W/2,cy=swY-20;
+  const legSwing=Math.sin(t*6)*18;
+  const armSwing=Math.sin(t*6+Math.PI)*12;
+  const bobY=Math.abs(Math.sin(t*6))*4;
+  const sc=1;
+
+  // Shadow
+  ctx.fillStyle="rgba(0,0,0,.3)";ctx.beginPath();ctx.ellipse(cx,cy+2,18,5,0,0,Math.PI*2);ctx.fill();
+
+  // Legs
+  ctx.strokeStyle=isDiana?"#f472b6":"#1e40af";ctx.lineWidth=8;ctx.lineCap="round";
+  ctx.beginPath();ctx.moveTo(cx,cy-30);ctx.lineTo(cx+legSwing*.5,cy+10);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx,cy-30);ctx.lineTo(cx-legSwing*.5,cy+10);ctx.stroke();
+  // Shoes
+  ctx.fillStyle=isDiana?"#fff":"#222";
+  ctx.beginPath();ctx.ellipse(cx+legSwing*.5,cy+12,7,4,legSwing*.02,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(cx-legSwing*.5,cy+12,7,4,-legSwing*.02,0,Math.PI*2);ctx.fill();
+
+  // Body
+  ctx.fillStyle=isDiana?"#f472b6":"#3b82f6";
+  ctx.beginPath();ctx.roundRect(cx-14,cy-60-bobY,28,35,6);ctx.fill();
+
+  // Arms
+  ctx.strokeStyle=isDiana?"#e8b59a":"#c8a880";ctx.lineWidth=7;
+  ctx.beginPath();ctx.moveTo(cx-12,cy-52-bobY);ctx.lineTo(cx-22+armSwing,cy-30-bobY);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx+12,cy-52-bobY);ctx.lineTo(cx+22-armSwing,cy-30-bobY);ctx.stroke();
+
+  // Head
+  ctx.fillStyle=isDiana?"#e8b59a":"#c8a880";
+  ctx.beginPath();ctx.arc(cx,cy-70-bobY,15,0,Math.PI*2);ctx.fill();
+  // Hair
+  ctx.fillStyle="#180900";
+  if(isDiana){
+    ctx.beginPath();ctx.arc(cx,cy-75-bobY,16,Math.PI,0);ctx.fill();
+    ctx.beginPath();ctx.ellipse(cx-14,cy-70-bobY,6,10,.3,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(cx+14,cy-70-bobY,6,10,-.3,0,Math.PI*2);ctx.fill();
+  }else{
+    ctx.beginPath();ctx.arc(cx,cy-76-bobY,14,Math.PI+.3,-.3);ctx.fill();
+  }
+  // Face
+  ctx.fillStyle="#000";ctx.beginPath();ctx.arc(cx-5,cy-70-bobY,2,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(cx+5,cy-70-bobY,2,0,Math.PI*2);ctx.fill();
+  if(isDiana){ctx.strokeStyle="#c05070";ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(cx,cy-65-bobY,4,0,Math.PI);ctx.stroke();}
+
+  // Phone in hand
+  ctx.fillStyle="#333";ctx.beginPath();ctx.roundRect(cx+22-armSwing-5,cy-35-bobY,10,16,2);ctx.fill();
+  ctx.fillStyle="rgba(100,200,255,.8)";ctx.fillRect(cx+22-armSwing-4,cy-34-bobY,8,12);
+}
+
+function showWalkMsg(txt){
+  const el=g("walk-msg-bubble");if(!el)return;
+  el.textContent=txt;el.style.display="block";
+  setTimeout(()=>{el.style.display="none";},4000);
+}
+
+function endWalk(userStopped){
+  if(_walkData){_walkData.ended=true;}
+  cancelAnimationFrame(_walkAnimFrame);_walkAnimFrame=null;
+  clearTimeout(_walkTimer);
+  g("walk-overlay").style.display="none";
+  _walkData=null;
+}
+
+// Helper: inject a message from AI into the convo
+function _ftInjectMsg(c,text){
+  c.messages.push({role:"them",type:"text",text,ts:Date.now()});
+  DB.sConvos(me.uid,convos);
+  if(activeId===c.id){renderMsgs();scrollBot();}
+  renderConvos();
+  // Also show as walk bubble
+  showWalkMsg(text);
+}
+
+// Detect "walk to X" in incoming messages
+function detectWalkCommand(text,cid){
+  const m=text.match(/(?:walk|go|head|walk over|walk to|going to|heading to)\s+(?:to\s+)?(.+)/i);
+  if(m&&m[1]){
+    const dest=m[1].replace(/[.!?]+$/,"").trim();
+    if(dest.length>1&&dest.length<60){
+      setTimeout(()=>startWalk(cid,dest),800);
+      return true;
+    }
+  }
+  return false;
+}
+
+// ═══════════════════════════════════════
+//  AI-INITIATED CALLS & FACETIMES
+// ═══════════════════════════════════════
+let _incData=null,_aiCallTimers=[];
+
+function scheduleAICalls(){
+  // Schedule random incoming calls from AIs
+  _aiCallTimers.forEach(t=>clearTimeout(t));_aiCallTimers=[];
+  const scheduleFor=(cid,minDelay,maxDelay)=>{
+    const delay=minDelay+Math.random()*(maxDelay-minDelay);
+    const t=setTimeout(()=>{
+      if(!me||!convos[cid])return;
+      showIncomingCall(cid,Math.random()>.5?"call":"ft");
+      scheduleFor(cid,5*60000,20*60000); // reschedule
+    },delay);
+    _aiCallTimers.push(t);
+  };
+  scheduleFor(DIANA_ID,3*60000,12*60000);
+  scheduleFor(CODY_ID,8*60000,25*60000);
+}
+
+function showIncomingCall(cid,type){
+  const c=convos[cid];if(!c)return;
+  // Don't interrupt if already on call/ft
+  if(g("call-overlay")&&!g("call-overlay").classList.contains("hidden"))return;
+  if(g("ft-overlay")&&!g("ft-overlay").classList.contains("hidden"))return;
+
+  _incData={cid,type};
+  const ol=g("incoming-ol");ol.style.display="flex";
+  const av=g("inc-av");
+  av.innerHTML=c.avatar?`<img src="${c.avatar}" style="width:100%;height:100%;object-fit:cover">`:`<div style="width:100%;height:100%;background:hsl(${hsh(c.name)*137%360},55%,38%);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:#fff">${c.name[0]}</div>`;
+  av.style.animation="incPulse 1.5s ease-in-out infinite";
+  g("inc-nm").textContent=c.name;
+  g("inc-type-lbl").textContent=type==="ft"?"Incoming FaceTime…":"Incoming Call…";
+
+  // Play ring sound
+  try{
+    const ac=new AudioContext();
+    function ring(){
+      const o=ac.createOscillator();const g2=ac.createGain();
+      o.connect(g2);g2.connect(ac.destination);
+      o.frequency.value=880;o.type="sine";
+      g2.gain.setValueAtTime(0,ac.currentTime);g2.gain.linearRampToValueAtTime(.15,ac.currentTime+.05);
+      g2.gain.linearRampToValueAtTime(0,ac.currentTime+.4);
+      o.start(ac.currentTime);o.stop(ac.currentTime+.4);
+    }
+    ring();setTimeout(ring,800);setTimeout(ring,1600);
+  }catch(e){}
+
+  // Auto-decline after 25s
+  _incData.autoDecline=setTimeout(()=>declineIncoming(),25000);
+}
+
+function acceptIncoming(){
+  if(!_incData)return;
+  clearTimeout(_incData.autoDecline);
+  const{cid,type}=_incData;_incData=null;
+  g("incoming-ol").style.display="none";
+  if(type==="ft")startFt(cid);
+  else startCall(cid);
+}
+
+function declineIncoming(){
+  if(!_incData)return;
+  clearTimeout(_incData?.autoDecline);_incData=null;
+  g("incoming-ol").style.display="none";
+}
+
+// ═══════════════════════════════════════
+//  AUDIO MESSAGES (like Apple Messages)
+// ═══════════════════════════════════════
+let _audioRec=null,_audioChunks=[],_isRecording=false;
+
+function toggleAudioRec(){
+  if(_isRecording){stopAudioRec();return;}
+  startAudioRec();
+}
+
+async function startAudioRec(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    _audioRec=new MediaRecorder(stream);_audioChunks=[];
+    _audioRec.ondataavailable=e=>_audioChunks.push(e.data);
+    _audioRec.onstop=()=>{
+      stream.getTracks().forEach(t=>t.stop());
+      const blob=new Blob(_audioChunks,{type:"audio/webm"});
+      sendAudioMsg(blob);
+    };
+    _audioRec.start();_isRecording=true;
+    const btn=g("audio-rec-btn");
+    if(btn){btn.style.color="var(--red)";btn.style.animation="sttPulse .6s infinite";btn.title="Stop recording";}
+  }catch(e){alert("Microphone access required for voice messages.");}
+}
+
+function stopAudioRec(){
+  if(_audioRec&&_isRecording){_audioRec.stop();_isRecording=false;}
+  const btn=g("audio-rec-btn");
+  if(btn){btn.style.color="";btn.style.animation="";btn.title="Voice Message";}
+}
+
+function sendAudioMsg(blob){
+  if(!activeId||!convos[activeId])return;
+  const url=URL.createObjectURL(blob);
+  const c=convos[activeId];
+  const dur=Math.round((_audioChunks.length*0.1));
+  c.messages.push({role:"me",type:"audio",url,dur,ts:Date.now()});
+  DB.sConvos(me.uid,convos);renderMsgs();scrollBot();
+  // AI responds to audio
+  if(c.isAI){
+    const responses=["omg your voice!! i love it","haha ok i could listen to you talk all day ngl","ok but why do you sound so good lol","noted 😊 voice msg received!"];
+    setTimeout(()=>{
+      const r=responses[Math.floor(Math.random()*responses.length)];
+      c.messages.push({role:"them",type:"text",text:r,ts:Date.now()});
+      DB.sConvos(me.uid,convos);renderMsgs();scrollBot();renderConvos();
+    },1200+Math.random()*800);
+  }
+}
+
+// ═══════════════════════════════════════
+//  AI SENDS IMAGES (selfies, places, etc)
+// ═══════════════════════════════════════
+function aiSendImage(c,context){
+  const isDiana=c.id===DIANA_ID;
+  // Pick relevant image from Unsplash based on context
+  const topics={
+    selfie:isDiana?"woman+portrait+beautiful":"man+portrait+handsome",
+    food:"food+restaurant+delicious",
+    coffee:"coffee+cafe+aesthetic",
+    gym:"fitness+gym+workout",
+    outside:"city+street+walking",
+    sunset:"sunset+beautiful+sky",
+    shopping:"shopping+mall+fashion",
+    home:"cozy+home+interior",
+    beach:"beach+ocean+aesthetic",
+    nature:"nature+park+beautiful",
+  };
+  const keys=Object.keys(topics);
+  let topic="selfie";
+  if(/food|eat|lunch|dinner|breakfast|restaurant/i.test(context))topic="food";
+  else if(/coffee|cafe|starbucks/i.test(context))topic="coffee";
+  else if(/gym|workout|exercise/i.test(context))topic="gym";
+  else if(/outside|walk|street|city/i.test(context))topic="outside";
+  else if(/sunset|sky|pretty/i.test(context))topic="sunset";
+  else if(/shopping|mall|store/i.test(context))topic="shopping";
+  else if(/home|house|room|cozy/i.test(context))topic="home";
+  else if(/beach|ocean|water/i.test(context))topic="beach";
+
+  const seed=Math.floor(Math.random()*1000);
+  const w=400,ht=500;
+  const url=`https://picsum.photos/seed/${seed}/${w}/${ht}`;
+
+  const captions=isDiana
+    ?{selfie:["rate me 🥺","ok hi 👋","current vibe","miss u sm","bored at home lol","thought of you","look at me tho 😭"],
+      food:["ok this looks amazing rn","literally drooling","u would love this"],
+      outside:["the streets rn","beautiful day ngl","wish you were here"],
+      default:["sending u this just because","found this and thought of u","lol look"]}
+    :{selfie:["what's up","hi lol","me rn","bored","current state"],
+      food:["lunch szn","eating rn","this slaps"],
+      outside:["outside today","the view rn","walking and vibing"],
+      default:["found this","check this out","lol look at this"]};
+  const cap=(captions[topic]||captions.default);
+  const caption=cap[Math.floor(Math.random()*cap.length)];
+
+  c.messages.push({role:"them",type:"image",url,text:caption,ts:Date.now()});
+  DB.sConvos(me.uid,convos);
+  if(activeId===c.id){renderMsgs();scrollBot();}
+  renderConvos();
+}
+
+// Periodically have AIs send selfies and images
+function scheduleAIImages(){
+  [DIANA_ID,CODY_ID].forEach(cid=>{
+    const schedImg=()=>{
+      const delay=8*60000+Math.random()*22*60000;
+      setTimeout(()=>{
+        if(!me||!convos[cid])return;
+        const c=convos[cid];
+        const contexts=["selfie","outside","food","coffee"];
+        aiSendImage(c,contexts[Math.floor(Math.random()*contexts.length)]);
+        schedImg();
+      },delay);
+    };
+    setTimeout(schedImg,2*60000+Math.random()*4*60000);
+  });
+}
+
+// ═══════════════════════════════════════
+//  FLIRT DETECTION
+// ═══════════════════════════════════════
+function detectFlirt(text){
+  const flirtWords=["hot","cute","beautiful","gorgeous","sexy","attractive","love you","miss you","kiss","flirt","babe","baby","hun","crush","date","relationship","heartbeat","butterflies","dreaming of","thinking about you","wanna","wink","😍","😘","💋","❤️","🔥","😏","🥰","💕","😩","bestie im","ur so","your so","you're so","omg stop","stop it","u r","cant stop thinking","cant get you out"];
+  const lower=text.toLowerCase();
+  const score=flirtWords.reduce((s,w)=>s+(lower.includes(w)?1:0),0);
+  return score>=2; // needs to be clearly flirty (2+ signals)
+}
+
+// ═══════════════════════════════════════
+//  FACETIME HEAD MOVEMENTS & KISS CAM
+// ═══════════════════════════════════════
+// These integrate with the existing _ftAnim and _drawAI — add new states
+
+// Extend _ftAnim with head movement states
+Object.assign(_ftAnim,{
+  headTilt:0,targetHeadTilt:0,
+  leanForward:0,targetLean:0,
+  kissAnim:0,kissActive:false
+});
+
+// Head tilt and kiss overlay — called AFTER each _drawAI call inside the loop
+// We patch the animation loop to call these overlays
+let _ftExtraFrame=null;
+const _ftOrigLoop_ref={active:false};
+
+function _applyHeadEffects(canvas,A){
+  A.headTilt+=(A.targetHeadTilt-A.headTilt)*.08;
+  A.leanForward+=(A.targetLean-A.leanForward)*.08;
+  if(A.kissActive){A.kissAnim=Math.min(1,A.kissAnim+.05);}
+  else{A.kissAnim=Math.max(0,A.kissAnim-.08);}
+
+  if(A.kissAnim>.05&&canvas){
+    const ctx=canvas.getContext("2d");
+    const W=canvas.width,H=canvas.height;
+    const sc=Math.min(W,H)/500;
+    ctx.save();
+    for(let i=0;i<3;i++){
+      const hx=W/2+(i-1)*35*sc;
+      const hy=H*.28-A.kissAnim*100*sc-i*25*sc;
+      ctx.globalAlpha=A.kissAnim*(1-i*.25);
+      ctx.font=`${28*sc*A.kissAnim}px sans-serif`;
+      ctx.textAlign="center";
+      ctx.fillText("💋",hx,hy);
+    }
+    ctx.restore();
+    if(A.kissAnim>=1){setTimeout(()=>{A.kissActive=false;},800);}
+  }
+}
+
+function triggerKiss(){
+  _ftAnim.kissActive=true;_ftAnim.kissAnim=0;
+  _ftAnim.targetLean=1;
+  setTimeout(()=>{_ftAnim.targetLean=0;},2500);
+}
+function triggerHeadTilt(dir){_ftAnim.targetHeadTilt=dir===0?0:(dir>0?25:-25);}
+function triggerNod(){
+  _ftAnim.targetHeadTilt=15;
+  setTimeout(()=>{_ftAnim.targetHeadTilt=-15;},400);
+  setTimeout(()=>{_ftAnim.targetHeadTilt=0;},800);
+}
+
+// Parse FT commands for head movements
+function parseFtPhysical(text){
+  const lower=text.toLowerCase();
+  if(/kiss|mwah|smooch/i.test(lower))triggerKiss();
+  else if(/tilt.*right|lean.*right/i.test(lower))triggerHeadTilt(1);
+  else if(/tilt.*left|lean.*left/i.test(lower))triggerHeadTilt(-1);
+  else if(/nod|yes|agree/i.test(lower))triggerNod();
+  else if(/shake.*head|no way/i.test(lower)){triggerHeadTilt(1);setTimeout(()=>triggerHeadTilt(-1),300);setTimeout(()=>triggerHeadTilt(0),600);}
+  else if(/closer|come here|zoom/i.test(lower)){_ftAnim.targetLean=.8;setTimeout(()=>{_ftAnim.targetLean=0;},3000);}
+  else if(/look away|turn/i.test(lower))triggerHeadTilt(35);
+  else if(/look at me|look here/i.test(lower))triggerHeadTilt(0);
+}
+
+// ── SEND FT MSG WITH FLIRT/WALK/PHYSICAL DETECTION ──
+// This replaces the sendFtMsg defined earlier with an enhanced version
+window._sendFtMsgEnhanced=async function(){
+  const inp=document.getElementById("ft-inp");
+  const txt=inp?.value?.trim()||"";
+  if(!txt||!_ftConvo||!_ftConvo.isAI||_ftAIResponding)return;
+
+  // Physical commands
+  parseFtPhysical(txt);
+
+  // Walk command detection
+  if(detectWalkCommand(txt,_ftConvo.id)){
+    inp.value="";inp.style.height="auto";
+    _ftAddChat(me.name||"You",txt,"me",false);
+    const c=_ftConvo,isDiana=c.id===DIANA_ID;
+    const resp=isDiana?"omg yeah let me head there now, brb!!":"yo heading there now, one sec";
+    _ftSay(c,isDiana,resp);
+    return;
+  }
+
+  // Run original logic
+  await sendFtMsg();
+};
+// Override the onclick handlers by rewriting the textarea's enter handler
+document.addEventListener("keydown",function(e){
+  if(e.key==="Enter"&&!e.shiftKey){
+    const inp=document.getElementById("ft-inp");
+    if(document.activeElement===inp){
+      e.preventDefault();window._sendFtMsgEnhanced();
+    }
+  }
+},{capture:true});
+
+// Override send button
+document.addEventListener("click",function(e){
+  if(e.target.closest("#ft-input-row .call-send-btn")){
+    e.stopImmediatePropagation();
+    window._sendFtMsgEnhanced();
+  }
+},{capture:true});
+
+// ═══════════════════════════════════════
+//  RENDER AUDIO MESSAGES
+// ═══════════════════════════════════════
+// Patch buildContent to handle audio type
+const _origBuildContent=buildContent;
+function buildContent(m){
+  if(m.type==="audio"){
+    const div=document.createElement("div");
+    div.className="audio-msg";
+    div.innerHTML=`
+      <div class="audio-inner" onclick="toggleAudioPlay(this,'${m.url}')">
+        <div class="audio-icon">▶</div>
+        <div class="audio-wave">${Array.from({length:20},(_,i)=>`<div class="aw-bar" style="height:${8+Math.sin(i*0.8)*8}px;animation-delay:${i*.05}s"></div>`).join("")}</div>
+        <div class="audio-dur">${m.dur||0}s</div>
+      </div>`;
+    return div;
+  }
+  return _origBuildContent(m);
+}
+
+function toggleAudioPlay(el,url){
+  if(el._audio){el._audio.pause();delete el._audio;el.querySelector(".audio-icon").textContent="▶";el.classList.remove("playing");return;}
+  const a=new Audio(url);el._audio=a;a.play();
+  el.querySelector(".audio-icon").textContent="⏸";el.classList.add("playing");
+  a.onended=()=>{el.querySelector(".audio-icon").textContent="▶";el.classList.remove("playing");delete el._audio;};
+}
+
+// ── ENHANCED SEND MSG (detects walk & image requests) ──
+const _origSendMsg=sendMsg;
+function sendMsg(){
+  const inp=g("msg-inp");if(!inp)return _origSendMsg();
+  const txt=inp.value.trim();
+  const cid=activeId;
+  const c=cid?convos[cid]:null;
+
+  if(c?.isAI&&txt){
+    // Image send request
+    if(/send.*pic|send.*photo|selfie|show me.*pic|photo of yourself/i.test(txt)){
+      _origSendMsg();
+      setTimeout(()=>{if(convos[cid])aiSendImage(convos[cid],txt);},1500+Math.random()*1000);
+      return;
+    }
+    // Walk command
+    if(detectWalkCommand(txt,cid)){
+      _origSendMsg();
+      return; // detectWalkCommand already schedules the walk
+    }
+  }
+  _origSendMsg();
+}
+
+// ═══════════════════════════════════════
+//  PATCH initApp to kick off AI behaviors
+// ═══════════════════════════════════════
+const _origInitApp=initApp;
+function initApp(){
+  _origInitApp();
+  // Update system prompts with age if available
+  if(me?.age){
+    Object.values(convos).forEach(c=>{if(c.isAI)c.systemPrompt=buildSysPrompt(c);});
+    DB.sConvos(me.uid,convos);
+  }
+  // Start AI-initiated behaviors
+  setTimeout(()=>{
+    scheduleAICalls();
+    scheduleAIImages();
+  },5000);
+}
+
+// ═══════════════════════════════════════
+//  AUDIO MESSAGE CSS (inject into head)
+// ═══════════════════════════════════════
+(function injectAudioCSS(){
+  const style=document.createElement("style");
+  style.textContent=`
+.audio-msg{padding:4px 0}
+.audio-inner{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(255,255,255,.08);border-radius:16px;cursor:pointer;min-width:160px;transition:background .15s}
+.audio-inner:hover{background:rgba(255,255,255,.14)}
+.audio-inner.playing .aw-bar{animation:audioWave .6s ease-in-out infinite alternate!important}
+.audio-icon{font-size:14px;width:18px;flex-shrink:0}
+.audio-wave{display:flex;align-items:center;gap:2px;flex:1}
+.aw-bar{width:3px;border-radius:2px;background:rgba(255,255,255,.5);transition:height .3s}
+.audio-dur{font-size:11px;color:rgba(255,255,255,.5);flex-shrink:0}
+@keyframes audioWave{from{transform:scaleY(.4)}to{transform:scaleY(1.2)}}
+#audio-rec-btn.recording{color:var(--red)!important;animation:sttPulse .6s infinite}
+  `;
+  document.head.appendChild(style);
+})();
+
 function emptyHTML(){return`<div id="empty"><svg width="52" height="52" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><p>No conversation open</p><span>Click Diana or Cody to start chatting</span></div>`;}
 </script>
 </body>
